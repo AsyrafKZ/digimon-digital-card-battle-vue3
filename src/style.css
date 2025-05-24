@@ -1,0 +1,558 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* always assumes resolution of 1920x1080 */
+:root {
+    --vw: calc(1920px / 100);
+    --vh: calc(1080px / 100); /* Assuming a 16:9 aspect ratio */
+  }  
+
+body {
+    margin: 0;
+    font-family: "ArkPixel";
+}
+
+canvas {
+    display: block;
+}
+
+@font-face {
+    font-family: "ArkPixel";
+    src: url("./assets/fonts/ark-pixel-16px-proportional-latin.ttf");
+}
+
+.card-count {
+    background: none;
+    font-size: 3vw;
+    font-family: "ArkPixel";
+    color: white;
+}
+
+.game-board-button {
+    position: absolute;
+    font-size: 3vh;
+    text-align: center;
+    font-family: "ArkPixel";
+    min-width: 10vw;
+    left: 20px;
+    background-color: antiquewhite;
+}
+
+.game-board-button:active {
+    opacity: 0;
+    transition: all 0.3s;
+    box-shadow: 0 0 10px 40px aquamarine;
+}
+
+/* phase debug buttons */
+.turn-phase-container {
+    position: absolute;
+    top: 1vw;
+    left: 1vw;
+    height: 14vw;
+    width: 13vw;
+    line-height: 3vw;
+}
+.phase-banner {
+    position: absolute;
+    top: 1vw;
+    left: 1vw;
+    font-family: "ArkPixel";
+}
+
+.draw-btn {
+    bottom: 21vw;
+}
+
+.entrance-btn {
+    bottom: 18vw;
+}
+
+.rackUpDp-btn {
+    bottom: 15vw;
+}
+
+.digivolve-btn {
+    bottom: 12vw;
+}
+
+.choose-attack-btn {
+    bottom: 9vw;
+}
+
+.support-btn1 {
+    bottom: 6vw;
+}
+.support-btn2 {
+    left: 170px;
+    bottom: 6vw;
+}
+
+.battle-btn {
+    bottom: 3vw;
+}
+
+.end-btn {
+    bottom: 1vw;
+}
+
+.player-btn {
+    height: 5vw;
+    width: 5vw;
+    font-size: 1vw;
+    font-family: "ArkPixel";
+    left: 8vw;
+    bottom: 1vw;
+}
+
+.active-nm {
+    background: none;
+    width: 20vw;
+    font-size: 2vw;
+    font-family: "ArkPixel";
+    color: white;
+}
+
+.active-pow {
+    background: none;
+    width: 7vw;
+    text-align: right;
+    font-size: 3vw;
+    font-family: "ArkPixel";
+    color: white;
+}
+
+.active-eff {
+    background: none;
+    width: 11vw;
+    font-size: 1.5vw;
+    font-weight: bold;
+    font-family: "ArkPixel";
+    color: white;
+}
+
+.active-penalty {
+    color: pink;
+    text-shadow: -1px -1px 0 #ff0000, 0 -1px 0 #ff0000, 1px -1px 0 #ff0000,
+        1px 0 0 #ff0000, 1px 1px 0 #ff0000, 0 1px 0 #ff0000, -1px 1px 0 #ff0000,
+        -1px 0 0 #ff0000;
+}
+
+.active-hp-label {
+    background: rgba(0, 0, 0, 0.55);
+    min-width: 8.25vw;
+    text-align: left;
+    font-size: 2vw;
+    font-family: "ArkPixel";
+    font-weight: bold;
+    color: white;
+    padding-left: 0.5vw;
+    line-height: 2.2vw;
+}
+
+.active-hp {
+    background: none;
+    width: 7vw;
+    text-align: right;
+    font-size: 2.8vw;
+    font-family: "ArkPixel";
+    color: white;
+}
+
+/* Attack Choice */
+.choice {
+    width: 40vw;
+    font-size: 3vw;
+    font-family: "ArkPixel";
+    color: white;
+    text-shadow: -1px -1px 0 #000000, 0 -1px 0 #000000, 1px -1px 0 #000000,
+        1px 0 0 #000000, 1px 1px 0 #000000, 0 1px 0 #000000, -1px 1px 0 #000000,
+        -1px 0 0 #000000;
+    line-height: 2vw;
+}
+.choice-x-eff {
+    font-size: 2.4vw;
+}
+
+.choice-val {
+    width: 5vw;
+    text-align: right;
+}
+
+.choice-turn {
+    width: 3vw;
+    font-size: 2vw;
+    line-height: 1.5vw;
+    text-align: center;
+}
+
+.choice-name {
+    color: yellow;
+}
+
+.choice-img {
+    width: 2vw;
+    height: 2vw;
+}
+
+/* Common Specialty Logo Color */
+.sp-fire {
+    filter: invert(51%) sepia(39%) saturate(972%) hue-rotate(314deg) brightness(116%) contrast(92%);
+}
+
+.sp-ice {
+    filter: invert(51%) sepia(10%) saturate(3383%) hue-rotate(202deg) brightness(103%) contrast(99%);
+}
+
+.sp-nature {
+    filter: invert(85%) sepia(14%) saturate(1304%) hue-rotate(60deg) brightness(102%) contrast(104%);
+}
+
+.sp-darkness {
+    filter: invert(62%) sepia(5%) saturate(105%) hue-rotate(251deg) brightness(90%) contrast(85%);
+}
+
+.sp-rare {
+    /* filter: invert(98%) sepia(42%) saturate(1510%) hue-rotate(352deg) brightness(109%) contrast(101%); */
+    filter: invert(6%) sepia(6%) saturate(5315%) hue-rotate(231deg) brightness(100%) contrast(90%);
+}
+
+.svg-white {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(40deg) brightness(104%) contrast(105%);
+}
+
+/* Attack Choice Board On Hover */
+.attack-choice-invisible {
+    border: 3px solid rgba(0, 255, 0, 0);
+    width: 61vw;
+    height: 3vw;
+}
+.attack-choice-bloom {
+    width: 61vw;
+    height: 3vw;
+    box-shadow: 0px 0px 20px 10px white;
+}
+.card-invisible {
+    border: 3px solid rgba(255, 255, 0, 1);
+    width: 6vw;
+    height: 12vw;
+}
+.card-bloom {
+    width: 6vw;
+    height: 12vw;
+    box-shadow: 0px 0px 20px 10px yellow;
+}
+
+/* Info Board */
+.info {
+    font-size: 3vw;
+    font-family: "ArkPixel";
+    color: white;
+    text-shadow: -1px -1px 0 #000000, 0 -1px 0 #000000, 1px -1px 0 #000000,
+        1px 0 0 #000000, 1px 1px 0 #000000, 0 1px 0 #000000, -1px 1px 0 #000000,
+        -1px 0 0 #000000;
+    }
+
+.info-name {
+    width: 33vw;
+    font-size: 3vw;
+}
+
+.info-val {
+    width: 6vw;
+    text-align: right;
+    font-size: 3vw;
+}
+
+.info-x-eff {
+    width: 11vw;
+    font-size: 1.5vw;
+    text-align: left;
+}
+
+.info-img {
+    width: 2vw;
+    height: 2vw;
+}
+
+.info-dp {
+    width: 3vw;
+}
+
+.info-eff {
+    width: 30vw;
+    height: 12vw;
+    line-height: 2.6vw;
+}
+
+/* Number popup */
+.number-popup {
+    width: 5vw;
+    font-size: 5vw;
+    font-family: "ArkPixel";
+    font-style: italic;
+    font-weight: 650;
+    text-align: right;
+    letter-spacing: 1vw;
+    color: aquamarine;
+    text-shadow: -5px -5px 0 #000000, 0 -5px 0 #000000, 5px -5px 0 #000000,
+        5px 0 0 #000000, 5px 5px 0 #000000, 0 5px 0 #000000, -5px 5px 0 #000000,
+        -5px 0 0 #000000;
+}
+.number-popup-minus {
+    color: #ff0000;
+}
+.misfire-failure-popup {
+    width: 5vw;
+    font-size: 3vw;
+    font-family: "ArkPixel";
+    font-style: italic;
+    font-weight: 650;
+    text-align: center;
+    line-height: 3vw;
+    color: #ff0000;
+    text-shadow: -5px -5px 0 #000000, 0 -5px 0 #000000, 5px -5px 0 #000000,
+        5px 0 0 #000000, 5px 5px 0 #000000, 0 5px 0 #000000, -5px 5px 0 #000000,
+        -5px 0 0 #000000;
+}
+.eatup-hp-popup {
+    width: 14vw;
+    font-size: 3vw;
+    font-family: "ArkPixel";
+    font-style: italic;
+    font-weight: 650;
+    text-align: center;
+    line-height: 3vw;
+    color: aquamarine;
+    text-shadow: -5px -5px 0 #000000, 0 -5px 0 #000000, 5px -5px 0 #000000,
+        5px 0 0 #000000, 5px 5px 0 #000000, 0 5px 0 #000000, -5px 5px 0 #000000,
+        -5px 0 0 #000000;
+}
+
+/* OK! popup */
+.ok-popup {
+    width: 3vw;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+/* OPPONENT ATTACK CHOICE TODO: remove this */
+.oppC {
+    left:auto;
+    right: 20px;
+    top: 5vw;
+}
+.oppT {
+    left:auto;
+    right: 20px;
+    top: 10vw;
+}
+.oppX {
+    left:auto;
+    right: 20px;
+    top: 15vw;
+}
+
+.user-label {
+    font-size: 5vh;
+    line-height: 5vh;
+    width: 30vw;
+    color: white;
+    text-align: center;
+    text-shadow: -2px -2px 0 #333333, 0 -2px 0 #333333, 2px -2px 0 #333333,
+        2px 0 0 #333333, 2px 2px 0 #333333, 0 2px 0 #333333, -2px 2px 0 #333333,
+        -2px 0 0 #333333;
+}
+
+.match-result-banner {
+    display: flex;
+    width: 50vw;
+    height: 10vh;
+    background-color: #183141;
+    border: 1px solid white;
+    color: white;
+    font-size: 5vh;
+    line-height: 5vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.attack-choice-display {
+    font-size: 30vh;
+    font-weight: bold;
+    text-shadow:  
+    -2px -2px 0 black, 
+    2px -2px 0 white, 
+    -2px 2px 0 black, 
+    2px 2px 0 white;
+}
+
+.c-attack-display {
+    color:#ff0000
+}
+
+.t-attack-display {
+    color: #18FF0A;
+}
+
+.x-attack-display {
+    color: #0300CF;
+}
+
+/* Attack effect */
+.attack-pulse {
+    animation: pulse-out 0.75s;
+    border-radius: 50%;
+    width: 9vw;
+    height: 18vh;
+}
+@keyframes pulse-out {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0vh 0vh #FFFFFFCC;
+    }
+    
+    100% {
+        transform: scale(20);
+        box-shadow: 0 0 3vh 1vh #FFFFFFCC;
+    }
+}
+/* Being attacked effect */
+.being-attacked-pulse {
+    animation: pulse-in 0.4s;
+    border-radius: 50%;
+    width: 9vw;
+    height: 18vh;
+}
+@keyframes pulse-in {
+    0% {
+        transform: scale(20);
+        box-shadow: 0 0 3vh 0.1vh #FFFFFFCC;
+    }
+    100% {
+        transform: scale(0.1);
+        box-shadow: 0 0 3vh 0vh #FFFFFFCC;
+    }
+  }
+
+.player-pulse-position {
+    top: 42.5%; /* player active position */
+    left: 27.8%; /* player active position */
+}
+
+.opp-pulse-position {
+    top: 42.5%; /* opponent active position */
+    left: 63.5%; /* opponent active position */
+}
+
+.player-specialty-position {
+    top: 52%; /* player active position */
+    left: 32%; /* player active position */
+}
+
+.opp-specialty-position {
+    top: 52%; /* opponent active position */
+    left: 68%; /* opponent active position */
+}
+
+.player-digivolve-position {
+    top: 52%; /* player active position */
+    left: 42.5%; /* player active position */
+}
+
+.opp-digivolve-position {
+    top: 52%; /* opponent active position */
+    left: 57.5%; /* opponent active position */
+}
+
+.pulse-effect-hover {
+    animation: pulsing 0.5s infinite;
+}
+
+@keyframes pulsing {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 2vh 2vh rgba(255,255,150,0.7);
+    }
+    
+    50% {
+        transform: scale(1);
+        box-shadow: 0 0 4vh 3vh rgba(255,255,150,0.7);
+    }
+    
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 2vh 2vh rgba(255,255,150,0.7);
+    }
+  }
+
+.btn-pulse-effect:hover {
+    animation: btn-pulsing 0.5s infinite;
+}
+
+@keyframes btn-pulsing {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 1vh 0vh rgba(255,255,150,0.7);
+    }
+    
+    50% {
+        transform: scale(1);
+        box-shadow: 0 0 2vh 1vh rgba(255,255,150,0.7);
+    }
+    
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 1vh 0vh rgba(255,255,150,0.7);
+    }
+  }
+
+.pulse-effect-support {
+    animation: support-pulse 0.75s;
+}
+
+@keyframes support-pulse {    
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 2vh 1vh #FFFFFFCC;
+    }
+    90% {
+        transform: scale(1);
+        box-shadow: 0 0 4vh 4vh #FFFFFFCC;
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 4vh 4vh #FFFFFF00;
+    }
+  }
+
+.glow-inside-out {
+    animation: specialty-change 1.5s;
+    width: 1vh;
+    height: 1vh;
+    background-color: #F0CDEF55;
+}
+
+@keyframes specialty-change {
+    0% {
+        transform: scale(0.1);
+        box-shadow: 0 0 4vh 1vh #F0CDEF55;
+    }
+    20% {
+        transform: scale(1);
+        background-color: #F0CDEF;
+        box-shadow: 0 0 4vh 12vh #F0CDEF;
+    }
+    80% {
+        transform: scale(1);
+        background-color: white;
+        box-shadow: 0 0 3vh 12vh white;
+    }
+    100% {
+        transform: scale(0.8);
+        border-radius: 25%;
+        background-color: #F0CDEF00;
+        box-shadow: 0 0 3vh 12vh #F0CDEF00;
+    }
+  }
