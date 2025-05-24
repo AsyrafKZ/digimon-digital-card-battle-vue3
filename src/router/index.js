@@ -77,7 +77,7 @@ const routes = [
   {
     path: '/build/deck',
     name: 'EditDeck',
-    component: () => import('../components/menu/DeckBuilder/EditDeck.vue'),
+    component: () => import('../components/menu/EditDeck.vue'),
     props: (route) => ({
       id: route.query.id,
       isNewDeck: route.query.isNewDeck

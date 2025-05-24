@@ -222,12 +222,12 @@ import { ref, onMounted, computed, watch } from 'vue';
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
 import { specialtyToColor, specialtyToImg, specialtyToClass, buttonToSymbol } from "/src/utils/mapper";
 import * as levenshtein from "js-levenshtein"
-import BackButton from '../../common/BackButton.vue';
-import { playSelectClickSound, playHoverSound } from '../../../utils/audio';
-import ConfirmDialog from '../../common/ConfirmDialog.vue';
-import { useConfirmDialog } from '../../../composables/useConfirmDialog';
-import { useLocalStateStore } from '../../../stores/localState';
-import MessageToast from '../../common/MessageToast.vue';
+import BackButton from '../common/BackButton.vue';
+import { playSelectClickSound, playHoverSound } from '../../utils/audio';
+import ConfirmDialog from '../common/ConfirmDialog.vue';
+import { useConfirmDialog } from '../../composables/useConfirmDialog';
+import { useLocalStateStore } from '../../stores/localState';
+import MessageToast from '../common/MessageToast.vue';
 
 defineProps({
     id: {
