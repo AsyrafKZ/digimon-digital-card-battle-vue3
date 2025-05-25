@@ -227,6 +227,7 @@ import { playSelectClickSound, playHoverSound } from '../../utils/audio';
 import ConfirmDialog from '../common/ConfirmDialog.vue';
 import { useConfirmDialog } from '../../composables/useConfirmDialog';
 import { useLocalStateStore } from '../../stores/localState';
+import { useGameDataStore } from '../../stores/gameData';
 import MessageToast from '../common/MessageToast.vue';
 
 defineProps({
@@ -256,6 +257,7 @@ const isCardLocked = ref(false)
 const lockedCard = ref({})
 const deckId = ref("")
 const localStateStore = useLocalStateStore()
+const gameDataStore = useGameDataStore()
 
 const LOCAL_STORAGE_MY_DECKS_KEY = "myDecks"
 const SPECIALTIES = ["Fire", "Ice", "Nature", "Darkness", "Rare"]
@@ -318,7 +320,6 @@ const filterPartner = ref({
     checkOn: false
 })
 
-const url = "http://localhost:3005/api"
 const hasUnsavedChange = ref(false);
 const messageToast = ref(null);
 
@@ -327,10 +328,8 @@ onMounted(async () => {
     deckId.value = route.query.id;
 
     // Set initial filter values
-    const allCardsRes = await fetch(`${url}/cards`)
-    const allCardsData = await allCardsRes.json()
-    allCards.value = allCardsData
-    filteredCards.value = allCardsData
+    allCards.value = JSON.parse(JSON.stringify(gameDataStore.cards))
+    filteredCards.value = JSON.parse(JSON.stringify(gameDataStore.cards))
 
     if (isNew.value) {
         return;
@@ -342,18 +341,14 @@ onMounted(async () => {
 
     // If not in localStorage, fetch from API
     if (!deck) {
-        const prebuildDecksRes = await fetch(`${url}/decks`)
-        const prebuildDecksData = await prebuildDecksRes.json();
-        // const response = await fetch(`${url}/decks/${deckId.value}`);
-        deck = prebuildDecksData.find(d => d.deckId === parseInt(deckId.value));
+        deck = gameDataStore.getDeckById(parseInt(deckId.value));
 
         isMyDeck.value = false;
     }
 
     // Fetch card details for the deck
-    const cardRes = await fetch(`${url}/cards/id=${deck.cardIds}`);
-    const cardData = await cardRes.json();
-    editDeckCards.value = cardData.sort((a, b) => parseInt(a.number) - parseInt(b.number));
+    const deckCards = gameDataStore.getCardsByIds(deck.cardIds)
+    editDeckCards.value = deckCards.sort((a, b) => parseInt(a.number) - parseInt(b.number));
 
     // Set initial selected card
     if (editDeckCards.value.length > 0) {

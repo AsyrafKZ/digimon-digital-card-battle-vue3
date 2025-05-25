@@ -18,8 +18,8 @@ const stateStore = useStateStore();
 
 // ref
 const deckC = ref();
-const dummyUserId2 = "2";
-const dummyDeckId2 = "2";
+const dummyUserId2 = "1";
+const dummyDeckId2 = "4";
 const monsterCards = ref([])
 const optionCards = ref([])
 
@@ -29,7 +29,7 @@ const testDeck = ref([
     id: 1,
     ref: "test01",
     position: { x: -3, y: -2, z: 0 },
-    sprite: "src/sprites/common/card-back.png",
+    sprite: "/src/sprites/common/card-back.png",
   },
 ]);
 
@@ -78,11 +78,12 @@ const setDeck = async () => {
     }
   }
 
-  // update html card count
-  const deckCnt = document.getElementById("oDeckCount");
-  const offlineCnt = document.getElementById("oOfflineCount");
-  deckCnt.innerHTML = oppStore.oDeckCount;
-  offlineCnt.innerHTML = 0;
+  setTimeout(() => {
+    const deckCnt = document.getElementById("oDeckCount");
+    const offlineCnt = document.getElementById("oOfflineCount");
+    deckCnt.innerHTML = oppStore.oDeckCount;
+    offlineCnt.innerHTML = 0;
+  }, 1000);
 }
 </script>
 

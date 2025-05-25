@@ -108,3 +108,20 @@ export const READY = {
     INIT_OK: 1,
     LOADING_OK: 2,
 }
+
+// Define constants for player/opponent types
+export const PLAYER_TYPES = {
+    HUMAN: "HUMAN",
+    CPU_EASY: "CPU_EASY",
+    CPU_HARD: "CPU_HARD",
+    REMOTE_PLAYER: "REMOTE_PLAYER", // For online multiplayer
+  };
+
+export const CARD_STATE = {
+    DECK: "DECK",
+    HAND: "HAND",
+    OFFLINE: "OFFLINE", // GRAVEYARD
+    ACTIVE: "ACTIVE",
+    ACTIVE_DIGIVOLVED: "ACTIVE_DIGIVOLVED",
+    DP: "DP",
+}

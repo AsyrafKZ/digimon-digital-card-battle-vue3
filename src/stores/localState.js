@@ -1,5 +1,6 @@
 // local client states
 import { defineStore } from "pinia";
+import { useGameDataStore } from "./gameData";
 
 const LOCAL_STORAGE_PLAY_DECK_KEY = "playDeckId";
 const LOCAL_STORAGE_OPPONENT_PLAY_DECK_KEY = "opponentPlayDeckId";
@@ -18,6 +19,10 @@ const deck = {
 
 export const useLocalStateStore = defineStore("localState", {
   state: () => ({
+    player: {
+      id: "",
+      name: ""
+    },
     vsCpuPlayerDeck: JSON.parse(JSON.stringify(deck)),
     vsCpuOpponentDeck: JSON.parse(JSON.stringify(deck)),
     vsPlayerDeck: JSON.parse(JSON.stringify(deck)),
@@ -38,6 +43,10 @@ export const useLocalStateStore = defineStore("localState", {
   actions: {
     // initialize local state from local storage
     async init() {
+      // load player profile (name, id)
+      const player = await this.getPlayerProfile()
+      this.player = player
+
       // Load my decks from local storage
       if (localStorage.getItem(LOCAL_STORAGE_MY_DECKS_KEY)) {
         const myDecks = JSON.parse(
@@ -49,13 +58,15 @@ export const useLocalStateStore = defineStore("localState", {
         localStorage.setItem(LOCAL_STORAGE_MY_DECKS_KEY, JSON.stringify([]));
       }
 
-      // Load current VS CPU Player Deck ID from local storage
+      // Load latest VS CPU Player Deck ID from local storage(TODO: fetch from firebase auth)
       const vsCpuPlayerDeckId = localStorage.getItem(
         LOCAL_STORAGE_PLAY_DECK_KEY
       );
+      // Load latest VS CPU Opponent Deck ID from local storage(TODO: fetch from firebase auth)
       const vsCpuOpponentDeckId = localStorage.getItem(
         LOCAL_STORAGE_OPPONENT_PLAY_DECK_KEY
       );
+      // Load latest VS Player Deck ID from local storage (TODO: fetch from firebase auth)
       const vsPlayerDeckId = localStorage.getItem(
         LOCAL_STORAGE_ONLINE_PLAY_DECK_KEY
       );
@@ -98,11 +109,9 @@ export const useLocalStateStore = defineStore("localState", {
     async findDeckById(deckId) {
       let deck = this.playerDecks.find((deck) => deck.deckId == deckId);
 
-      // if deck is not found in player created decks, fetch prebuild decks from the server
+      // if deck is not found in player created decks, search in prebuild decks
       if (!deck) {
-        const url = "http://localhost:3005/api/";
-        const deckRes = await fetch(`${url}decks`);
-        const deckData = await deckRes.json();
+        const deckData = useGameDataStore().prebuildDecks;
         deck = deckData.find((deck) => deck.deckId == deckId);
       }
       return deck;
@@ -115,5 +124,14 @@ export const useLocalStateStore = defineStore("localState", {
         JSON.stringify(this.playerDecks)
       );
     },
+    // get player profile
+    async getPlayerProfile() {
+      // TODO: fetch from firebase when available
+      const player = {
+        id: "localPlayer",
+        name: "User"
+      }
+      return player;
+    }
   },
 });

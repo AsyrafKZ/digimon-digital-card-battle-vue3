@@ -18,8 +18,8 @@
 import GameBoard from "./components/GameBoard.vue"
 import MainMenu from "./components/MainMenu.vue"
 import { useStateStore } from "./stores/state"
-import { useConnectionStore } from "./stores/connection";
-import { socket } from "./socket"
+// import { useConnectionStore } from "./stores/connection";
+// import { socket } from "./socket"
 
 const stateStore = useStateStore();
 

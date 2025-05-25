@@ -7,6 +7,7 @@ import App from './App.vue'
 // import and set up Pinia (state management)
 import { createPinia } from 'pinia'
 import { useLocalStateStore } from './stores/localState'
+import { useGameDataStore } from './stores/gameData'
 // import and set up Vue router
 import router from './router'
 
@@ -18,8 +19,11 @@ app.use(router)
 app.use(createPinia())
 
 // initialize Pinia stores
+const gameDataStore = useGameDataStore()
+await gameDataStore.init()
 const localStateStore = useLocalStateStore()
 await localStateStore.init()
+
 
 // this tells Vue to take the application instance (rooted by App.vue)
 // and render its output into the HTML element with the ID app

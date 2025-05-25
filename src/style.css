@@ -24,7 +24,7 @@ canvas {
 
 .card-count {
     background: none;
-    font-size: 3vw;
+    font-size: 2.5vw;
     font-family: "ArkPixel";
     color: white;
 }
@@ -355,8 +355,8 @@ canvas {
 }
 
 .user-label {
-    font-size: 5vh;
-    line-height: 5vh;
+    font-size: 4vh;
+    line-height: 4vh;
     width: 30vw;
     color: white;
     text-align: center;

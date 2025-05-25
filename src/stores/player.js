@@ -109,7 +109,7 @@ export const usePlayerStore = defineStore('player', {
             cardsParam = cardsParam.slice(0, -1); // shave off the last comma
 
             // fetch the cards
-            cardsParam = shuffleDeck(useStateStore().player.cardIds).join(",")
+            // cardsParam = shuffleDeck(useStateStore().player.cardIds).join(",")
             const res = await fetch(`http://localhost:3005/api/cards/id=${cardsParam}`)
             const resData = await res.json()
 

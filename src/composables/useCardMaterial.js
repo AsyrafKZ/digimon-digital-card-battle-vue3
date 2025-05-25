@@ -9,7 +9,7 @@ export function useCardMaterial(sprite, card) {
   
   const setupCardMaterial = (cardMesh) => {
     const textureLoader = new THREE.TextureLoader()
-    const backTexture = textureLoader.load("src/sprites/common/card-back.png")
+    const backTexture = textureLoader.load("/src/sprites/common/card-back.png")
     monsterTexture.value = textureLoader.load(sprite)
     
     // Set gradient color

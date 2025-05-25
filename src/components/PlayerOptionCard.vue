@@ -37,7 +37,7 @@ onMounted(() => {
   const card = optionC.value.mesh;
   const textureLoader = new THREE.TextureLoader();
   // set back side texture
-  const backTexture = textureLoader.load("src/sprites/common/card-back.png");
+  const backTexture = textureLoader.load("/src/sprites/common/card-back.png");
   // set monster image texture
   optionTexture.value = textureLoader.load(props.sprite);
   // set gradient color

@@ -4,6 +4,7 @@ import MainMenuView from '../components/menu/MainMenu.vue'
 import VsCpuMenuView from '../components/menu/VsCpuMenu.vue'
 import VsPlayerMenuView from '../components/menu/VsPlayerMenu.vue'
 import DeckBuilderView from '../components/menu/DeckBuilder.vue'
+import GameBoardView from '../components/GameBoard.vue'
 
 const routes = [
   {
@@ -26,6 +27,11 @@ const routes = [
         props: (route) => ({
           who: route.query.who,
         })
+      },
+      {
+        path: 'game',
+        name: 'VsCpuGame',
+        component: GameBoardView,
       }
     ]
   },

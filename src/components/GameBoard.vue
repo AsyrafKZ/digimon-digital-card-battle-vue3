@@ -1,5 +1,7 @@
 <template>
-    <Renderer ref="rendererC" antialias resize="window">
+    <div class="canvas-container">
+    <div class="canvas-frame" ref="canvasFrameC">
+    <Renderer ref="rendererC" antialias resize=true :orbit-ctrl="true">
         <Camera ref="cameraC" :position="{ z: 10 }" />
         <Scene ref="sceneC" background="#183141">
             <!-- Main Light -->
@@ -12,72 +14,82 @@
             <!-- Opponent Field -->
             <Plane ref="oFieldC" :width="12" :height="3" :position="{ y: 3, z: -0.5 }">
                 <LambertMaterial>
-                    <Texture src="src/sprites/opponent-field.png" />
+                    <Texture src="/src/sprites/opponent-field.png" />
                 </LambertMaterial>
             </Plane>
             <!-- Opponent Active Field -->
             <Plane ref="oAFieldC" :width="5.4" :height="2.8" :position="{ x: 2.9, z: -0.1 }">
                 <LambertMaterial>
-                    <Texture src="src/sprites/opponent-active-field.png" />
+                    <Texture src="/src/sprites/opponent-active-field.png" />
                 </LambertMaterial>
             </Plane>
             <!-- Opponent Support Bracket -->
             <Plane ref="oSupportC" :width="2.2" :height="0.8" :position="{ x: 1.4, y: -1, z: -0.502 }">
                 <LambertMaterial>
-                    <Texture src="src/sprites/opponent-support-bracket.png" />
+                    <Texture src="/src/sprites/opponent-support-bracket.png" />
                 </LambertMaterial>
             </Plane>
             <!-- Player Active Field -->
             <Plane ref="pAFieldC" :width="5.4" :height="2.8" :position="{ x: -2.85, z: -0.1 }">
                 <LambertMaterial>
-                    <Texture src="src/sprites/player-active-field.png" />
+                    <Texture src="/src/sprites/player-active-field.png" />
                 </LambertMaterial>
             </Plane>
             <!-- Player Support Bracket -->
             <Plane ref="pSupportC" :width="2.2" :height="0.8" :position="{ x: -1.3, y: 0.5, z: -0.502 }">
                 <LambertMaterial>
-                    <Texture src="src/sprites/player-support-bracket.png" />
+                    <Texture src="/src/sprites/player-support-bracket.png" />
                 </LambertMaterial>
             </Plane>
             <!-- Player Field -->
             <Plane ref="pFieldC" :width="12" :height="3" :position="{ y: -3, z: -0.5 }">
                 <LambertMaterial>
-                    <Texture src="src/sprites/player-field.png" />
+                    <Texture src="/src/sprites/player-field.png" />
                 </LambertMaterial>
             </Plane>
             <!-- Opponent Attack Choice -->
             <Plane ref="oChoiceC" :width="12" :height="3" :position="{ x: 0, y: 6.3, z: 0.3 }">
                 <LambertMaterial>
-                    <Texture src="src/sprites/choose-attack-opp.png" />
+                    <Texture src="/src/sprites/choose-attack-opp.png" />
                 </LambertMaterial>
             </Plane>
             <!-- Player Attack Choice -->
             <Plane ref="pChoiceC" :width="12" :height="3" :position="{ y: -6, z: 0.3 }">
                 <LambertMaterial>
-                    <Texture src="src/sprites/choose-attack-player.png" />
+                    <Texture src="/src/sprites/choose-attack-player.png" />
                 </LambertMaterial>
             </Plane>
             <!-- Info Board on Hover -->
             <Plane ref="infoBoardC" :width="12" :height="3" :position="{ x: -17, y: 2.8, z: 0.3 }">
                 <LambertMaterial>
-                    <Texture src="src/sprites/info-board.png" />
+                    <Texture src="/src/sprites/info-board.png" />
                 </LambertMaterial>
             </Plane>
             <Plane ref="infoBoardImgC" :width="3" :height="2.7" :position="{ x: -21.45, y: 2.65, z: 0.3 }">
                 <LambertMaterial>
-                    <Texture src="src/sprites/monsters/175.jpg" />
+                    <Texture src="/src/sprites/monsters/175.jpg" />
                 </LambertMaterial>
             </Plane>
             <!-- 1st Attack Banner -->
             <Plane ref="firstAttackBannerC" :width="1" :height="2" :position="{ x: 7, y: 0, z: 0.3 }">
                 <LambertMaterial>
-                    <Texture src="src/sprites/1st-attack-banner.png" />
+                    <Texture src="/src/sprites/1st-attack-banner.png" />
                 </LambertMaterial>
             </Plane>
             <!-- Player Deck -->
-            <PlayerDeck />
+            <!-- <PlayerDeck /> -->
+            <GameCards :actorId="gameStateStore.player.id" />
             <!-- Opponent Deck -->
-            <OpponentDeck />
+            <!-- <OpponentDeck /> -->
+            <GameCards :actorId="gameStateStore.opponent.id" />
+
+            <GameCanvasUI />
+
+            <TextLabel :position="{ x: -2, y: 2.8, z: 0.5 }" text="GameBoard" name="GameBoardtest">
+                <div>
+                    hello world from GameBoard.vue
+                </div>
+            </TextLabel>
         </Scene>
         <!-- Test change scene with a button click -->
         <!-- <Scene ref="mainMenuSceneC" background="#241E1C">
@@ -90,89 +102,8 @@
         </Scene> -->
     </Renderer>
 
-    <div class=" bg-sky-400">
-        <div class="phase-banner text-white text-4xl font-bold active-penalty">
-            {{ currentTurnStr }} TURN
-            <hr>
-        </div>
-        <div v-for="(phase, index) in phases" class="phase-banner text-3xl font-bold"
-         :class="stateStore.phase == phase  ? 'text-white active-penalty' : 'text-sky-900'"
-         :style="`top: ${8 * (index + 1)}vh;`">
-            {{ phaseToName(phase) }}
-            <br>
-            {{ phase != PHASE.END ? '↓' : '' }}
-        </div>
-    </div>
-
-    <UserButton v-if="showProceedBtn()" id="proceedButtonId" style="bottom: 28vh; left: 8vw" @click="gotoNextPhase(true)">
-        NEXT PHASE
-    </UserButton>
-    <ReadyButton />
-    <UserButton
-        v-if="stateStore.currentTurn == WHO.PLAYER && (stateStore.phase == PHASE.DRAW || stateStore.phase == PHASE.REDRAW)"
-        style="bottom: 16vh; left: 8vw" id="redrawButton" @click="gotoNextPhase(false)">
-        <!-- style="bottom: 16vh; left: 8vw" id="redrawButton" @click="changePhase(PHASE.REDRAW)"> -->
-        REDRAW
-    </UserButton>
-    <UserButton v-if="stateStore.phase == PHASE.CHOOSE_ATTACK" id="attackChoiceBoardId" 
-    class="w-36 h-28"
-        style="bottom: 16vh; left: 4vw; z-index: 999;" @click="toggleAttackChoice()">
-        {{ attackChoiceBtnStr }} ATTACK CHOICES
-    </UserButton>
-
-    <UserButton v-if="!returnBtnConfirm" id="returnBtnId" class="w-60" style="left: 1vw; bottom: 1vh; z-index: 999;" @click="returnToMainMenu(false)">
-        Return to Main Menu
-    </UserButton>
-    <div v-if="returnBtnConfirm">
-        <UserButton class="w-20" style="left: 1vw; bottom: 1vh; color: red; z-index: 999;" @click="returnToMainMenu(true)">
-            YES
-        </UserButton>
-        <UserButton class="w-20" style="left: 8vw; bottom: 1vh; z-index: 999;" @click="returnToMainMenu(false)">
-            NO
-        </UserButton>
-    </div>
-
     <!-- Game state debugger -->
-    <div v-if="stateStore.playerMode == MODE.DEV">
-        <UserButton id="drawButton" class="game-board-button draw-btn" @click="changePhase(1)">
-            DRAW PHASE
-        </UserButton>
-        <UserButton id="entranceButton" class="game-board-button entrance-btn" @click="changePhase(2)">
-            ENTRANCE PHASE
-        </UserButton>
-        <UserButton id="rackUpDpButton" class="game-board-button rackUpDp-btn" @click="changePhase(3)">
-            RACK-UP DP PHASE
-        </UserButton>
-        <UserButton id="digivolveButton" class="game-board-button digivolve-btn" @click="changePhase(4)">
-            DIGIVOLVE PHASE
-        </UserButton>
-        <UserButton id="chooseAttackButton" class="game-board-button choose-attack-btn" @click="changePhase(5)">
-            CHOOSE ATTACK PHASE
-        </UserButton>
-        <UserButton id="supportButton1" class="game-board-button support-btn1" @click="changePhase(6)">
-            SUPPORT PHASE 1
-        </UserButton>
-        <UserButton id="supportButton2" class="game-board-button support-btn2" @click="changePhase(PHASE.SUPPORT2)">
-            SUPPORT PHASE 2
-        </UserButton>
-        <UserButton id="battleButton" class="game-board-button battle-btn" @click="changePhase(7)">
-            BATTLE PHASE
-        </UserButton>
-        <UserButton id="endButton" class="game-board-button end-btn" @click="changePhase(0)">
-            END TURN
-        </UserButton>
-    </div>
-    <div v-if="stateStore.oppMode == MODE.DEV">
-        <UserButton class="game-board-button oppBtn oppC" @click="tempSetOppAttackChoice(ATTACK.C)">
-            CIRCLE 〇
-        </UserButton>
-        <UserButton class="game-board-button oppBtn oppT" @click="tempSetOppAttackChoice(ATTACK.T)">
-            TRIANGLE △
-        </UserButton>
-        <UserButton class="game-board-button oppBtn oppX" @click="tempSetOppAttackChoice(ATTACK.X)">
-            CROSS ✕
-        </UserButton>
-    </div>
+    <!-- <GamePhaseDevTools :sceneC="sceneC" :pChoiceC="pChoiceC" :oChoiceC="oChoiceC" :pFieldC="pFieldC" :oFieldC="oFieldC" :pAFieldC="pAFieldC" :pSupportC="pSupportC" :oSupportC="oSupportC" /> -->
 
     <!-- Chat System -->
     <!-- <textarea class="w-1/12 h-1/4 py-2 px-3" readonly v-model="logMsg"></textarea>
@@ -188,34 +119,62 @@
     <!-- <UserButton class="game-board-button player-btn" style="bottom: 40vh;" @click="changeScene">
         Change Scene
     </UserButton> -->
+</div>
+</div>
+<GameInfo :actor="currentTurnStr" />
+<GameAction @toggle-attack-choice="toggleAttackChoice" />
 </template>
   
 <script setup>
-import { ref, onMounted, onUnmounted, watch, computed } from "vue";
+import { ref, onMounted, onUnmounted, watch, computed, shallowRef, provide } from "vue";
 import PlayerDeck from "./PlayerDeck.vue";
 import OpponentDeck from "./OpponentDeck.vue"
 import { useStateStore } from "../stores/state";
 import { usePlayerStore } from "../stores/player";
 import { useOpponentStore } from "../stores/opponent";
+import { useGameStateStore } from "../stores/gameState";
 import { CSS2DRenderer } from "../../node_modules/three/examples/jsm/renderers/CSS2DRenderer.js";
-import { createChoiceComponents, createHandComponents, createActiveFieldComponents, createChoiceHoverComponents, createInfoComponents, createCommonUiComponents } from "./Counts";
 import { ATTACK, PHASE, WHO, MODE } from "../const/const";
 import { Selection, SelectiveBloomEffect, EffectComposer, RenderPass, EffectPass } from "postprocessing"
-import { battleManager } from "./battleManager";
-import { setOkPopup, removePulseEffect, moveSupportToOffline, drawDeckCardToHand, discardAllHandCards, moveActiveFieldIn, moveActiveFieldOut, set1stAttackBanner, moveAttackChoiceBoardIn, setToOriginalValue } from "./fieldManager"
+import { moveSupportToOffline, moveActiveFieldIn, set1stAttackBanner, setToOriginalValue, moveAttackChoiceBoardIn } from "./fieldManager"
 import { setAiAction, setOppAiAttack } from "./aiManager"
 import { changePlayerPhase, gotoNextPhase, showProceedBtn } from "./playerManager"
 import { createCard } from "../utils/createCard";
 import { animatePow } from "../animations/monster"
 import UserButton from "./UserButton.vue"
-import ReadyButton from "./ReadyButton.vue"
 import { specialtyToClass, specialtyToImg, speedToImg, turnToStr, phaseToName } from "../utils/mapper"
 import { socket } from "../socket"
 import { setActionVsPlayer, setActiveCardVsPlayer, setDpCardVsPlayer, setDigivolveCardVsPlayer, setSupportCardVsPlayer } from "./vsPlayerManager";
 import { briefPause } from "../animations/field";
+import GameInfo from "./GameInfo.vue";
+import GameAction from "./GameAction.vue";
+import GamePhaseDevTools from "./GamePhaseDevTools.vue";
+import GameCards from "./GameCards.vue";
+import TextLabel from "./TextLabel.vue"
+import GameCanvasUI from "./GameCanvasUI.vue"
 
-const rendererC = ref();
-const cameraC = ref();
+const canvasFrameC = ref(); // to append CSS2DRenderer's DOM
+const rendererC = ref(); // ref to TroisJS Renderer component
+const cameraC = ref(); // ref to TroisJS Camera component
+const sceneC = ref(); // ref to TroisJS Scene component
+
+// CSS2DRenderer instance
+let htmlRenderer = null;
+
+// the scene object doesnt need reactivity, so we can use a shallowRef. just need to pass the reference
+const threeScene = shallowRef(null);
+// const playerChoice = shallowRef(null);
+// const opponentChoice = shallowRef(null);
+// const playerActiveField = shallowRef(null);
+// const opponentActiveField = shallowRef(null);
+// const infoBoard = shallowRef(null);
+provide("threeScene", threeScene);
+// provide("playerChoice", playerChoice);
+// provide("opponentChoice", opponentChoice);
+// provide("playerActiveField", playerActiveField);
+// provide("opponentActiveField", opponentActiveField);
+// provide("infoBoard", infoBoard);
+
 const pChoiceC = ref();
 const oChoiceC = ref();
 const pFieldC = ref();
@@ -228,52 +187,56 @@ const infoBoardC = ref();
 const infoBoardImgC = ref();
 const firstAttackBannerC = ref();
 
-// access ThreeJS scene
-const sceneC = ref();
 const mainMenuSceneC = ref();
 
 // pinia stores
 const stateStore = useStateStore();
 const playerStore = usePlayerStore();
 const oppStore = useOpponentStore();
+const gameStateStore = useGameStateStore();
 playerStore.$reset();
 oppStore.$reset();
 
-const attackChoiceBtnStr = ref("HIDE");
-const showAttackChoiceBln = ref(true);
 const currentTurnStr = ref(``)
 const currentPhaseStr = ref(`Initial State`)
 const testPActiveCard = ref({}) // TODO: remove this later
 const testOActiveCard = ref({}) // TODO: remove this later
 const isCameraFacingBoard = ref(true);
-const returnBtnConfirm = ref(false);
 const logMsg = ref("");
 const myMsg = ref("");
-const phases = computed(() => {
-    let phases = []
-    for (const phase in PHASE) {
-        if (Object.hasOwnProperty.call(PHASE, phase)) {
-            const phaseValue = PHASE[phase];
-            if (phaseValue != PHASE.REDRAW && phaseValue != PHASE.DIGIVOLVE_SPECIAL) {
-                phases.push(phaseValue)
-            }
-        }
-    }
-    return phases
-})
-
-// set main HTML container
-const htmlRenderer = new CSS2DRenderer();
-htmlRenderer.setSize(window.innerWidth, window.innerHeight);
-htmlRenderer.domElement.id = "htmlRenderer";
-htmlRenderer.domElement.style.position = "absolute";
-htmlRenderer.domElement.style.top = "0px";
-htmlRenderer.domElement.style.pointerEvents = "none";
-htmlRenderer.name = "htmlRenderer";
 
 // Init
-onMounted(async () => {
+onMounted(() => {
+    // check if refs are initialized
+    if (!canvasFrameC.value || !rendererC.value || !cameraC.value || !sceneC.value) {
+        console.error("GameBoard: critical refs not available for CSS2DRenderer setup.");
+        return;
+    }
 
+    // assign the actual THREE.Scene object to the provided ref
+    threeScene.value = sceneC.value.scene;
+    // playerChoice.value = pChoiceC.value.mesh;
+    // opponentChoice.value = oChoiceC.value.mesh;
+    // playerActiveField.value = pAFieldC.value.mesh;
+    // opponentActiveField.value = oAFieldC.value.mesh;
+    // infoBoard.value = infoBoardC.value.mesh;
+
+    htmlRenderer = new CSS2DRenderer();
+    // set size based on the canvasFrameC element
+    const frameRect = canvasFrameC.value.getBoundingClientRect();
+    htmlRenderer.setSize(frameRect.width, frameRect.height);
+    htmlRenderer.domElement.id = "htmlRenderer";
+    htmlRenderer.domElement.style.position = "absolute";
+    htmlRenderer.domElement.style.top = "0px";
+    htmlRenderer.domElement.style.left = "0px"; // this would not align with our canvas because canvas is in flex layout
+    htmlRenderer.domElement.style.pointerEvents = "none"; // crucial
+    htmlRenderer.name = "htmlRenderer";
+
+    // append the CSS2DRenderer's DOM to the canvasFrame
+    canvasFrameC.value.appendChild(htmlRenderer.domElement);
+
+    // After mounting, the TroisJS component instances are available in rendererC.value, etc.
+    // And their underlying THREE.js objects are available on properties like .scene, .camera, .renderer
     const renderer = rendererC.value;
     const camera = cameraC.value;
     const scene = sceneC.value;
@@ -291,7 +254,6 @@ onMounted(async () => {
     const pSupport = pSupportC.value.mesh;
     const oSupport = oSupportC.value.mesh;
 
-    // set mode. TODO: move this to starting screen 
 
     // bind socket io listener events
     if (stateStore.playerMode == MODE.PROD && stateStore.oppMode == MODE.PROD) {
@@ -336,149 +298,82 @@ onMounted(async () => {
     stateStore.setTurn(WHO.PLAYER) // TODO: remove this
     currentTurnStr.value = stateStore.currentTurn;
 
-    // set HTML renderer to root container
-    const appC = document.getElementById("app");
-    appC.appendChild(htmlRenderer.domElement);
-
     // add HTML components
-    const componentsHand = createHandComponents();
-    const componentsActiveField = createActiveFieldComponents();
-    const componentsChoice = createChoiceComponents();
-    const componentsChoiceHover = createChoiceHoverComponents();
-    const componentsInfo = createInfoComponents();
-    const componentsCommonUi = createCommonUiComponents();
+    // const componentsChoice = createChoiceComponents();
+    // const componentsChoiceHover = createChoiceHoverComponents();
+    // const componentsInfo = createInfoComponents();
+    // const componentsCommonUi = createCommonUiComponents();
 
-    componentsHand.forEach((component) => {
-        scene.add(component);
-    })
-    componentsActiveField.forEach((component) => {
-        scene.add(component);
-        if (component.name.charAt(0) == "p") {
-            pAField.attach(component);
-        } else {
-            oAField.attach(component)
-        }
-    });
-    componentsChoice.forEach((component) => {
-        scene.add(component);
-        if (component.name.charAt(0) == "p") {
-            pChoice.attach(component);
-        } else {
-            oChoice.attach(component);
-        }
-    });
-    componentsChoiceHover.forEach((component) => {
-        scene.add(component);
-        pChoice.attach(component);
-    });
-    componentsInfo.forEach((component) => {
-        scene.add(component);
-        infoBoard.attach(component)
-    })
-    componentsCommonUi.forEach((component) => {
-        scene.add(component);
-    })    
+    // const textLabels = document.getElementsByClassName("css2d-label");
     
-    // render once to load all html components
-    htmlRenderer.render(scene.scene, camera.camera);
-    document.getElementById("playerName").innerHTML = stateStore.player.name;
-    document.getElementById("playerDeckName").innerHTML = stateStore.player.deckName;
-    document.getElementById("oppName").innerHTML = stateStore.opp.name;
-    document.getElementById("oppDeckName").innerHTML = stateStore.opp.deckName;
+    // for (let i = 0; i < textLabels.length; i++) {
+    //     const css2dObject = textLabels[i];
+    //     const label = css2dObject.children[0];
+    //     if (playerActiveFieldLabels.includes(label.id)) {
+    //         pAField.attach(css2dObject);
+    //     } else if (opponentActiveFieldLabels.includes(label.id)) {
+    //         oAField.attach(css2dObject);
+    //     } else if (playerChoiceLabels.includes(label.id) || playerChoiceHoverLabels.includes(label.id)) {
+    //         pChoice.attach(css2dObject);
+    //     } else if (opponentChoiceLabels.includes(label.id)) {
+    //         oChoice.attach(css2dObject);
+    //     }
+    // }
+    
+    // componentsActiveField.forEach((component) => {
+    //     scene.add(component);
+    //     if (component.name.charAt(0) == "p") {
+    //         pAField.attach(component);
+    //     } else {
+    //         oAField.attach(component)
+    //     }
+    // });
+    // componentsChoice.forEach((component) => {
+    //     scene.add(component);
+    //     if (component.name.charAt(0) == "p") {
+    //         pChoice.attach(component);
+    //     } else {
+    //         oChoice.attach(component);
+    //     }
+    // });
+    // componentsChoiceHover.forEach((component) => {
+    //     scene.add(component);
+    //     pChoice.attach(component);
+    // });
+    // componentsInfo.forEach((component) => {
+    //     scene.add(component);
+    //     infoBoard.attach(component)
+    // })
+    // componentsCommonUi.forEach((component) => {
+    //     scene.add(component);
+    // })    
+
 
     /**
      * MAIN RENDER LOOP
      */
     // Render - changes made here will be rendered in the next frame
     renderer.onBeforeRender(() => {
-        // render html CSS2DObject using the same scene and camera as the main renderer
-        htmlRenderer.render(scene.scene, camera.camera); // <<<< IMPORTANT!!!
+        if (htmlRenderer && sceneC.value && cameraC.value) {
+            // render html CSS2DObject using the same scene and camera as the main renderer
+            htmlRenderer.render(scene.scene, camera.camera); // <<<< IMPORTANT!!!
+        }
     });
 
     // Effect implementation debug purpose - TODO: remove this later
     // console.log("before setActiveCard")
     // await setActiveCard();
     // console.log("after setActiveCard")
+
+    // handle window resize (if needed)
+    // window.addEventListener("resize", handleResize);
+    // handleResize();
 });
 
 onUnmounted(() => {
-    const htmlRenderer = document.getElementById("htmlRenderer");
-    htmlRenderer.remove();
     stateStore.$reset();
     stateStore.setOppMode(MODE.AI);
 })
-
-/**
- * Change current phase
- */
-const changePhase = async (phase) => {
-    stateStore.setPhase(phase);
-
-    // DRAW
-    if (phase == PHASE.DRAW) {
-        await drawDeckCardToHand(WHO.PLAYER, sceneC.value.scene, 4);
-    }
-    // REDRAW
-    else if (phase == PHASE.REDRAW) {
-        console.log("redraw kat gameboard.vue")
-        await discardAllHandCards(WHO.PLAYER, sceneC.value.scene);
-        if (playerStore.pDeckCount <= 0) {
-            // TODO: YOU LOSE!
-            return;
-        }
-        await drawDeckCardToHand(WHO.PLAYER, sceneC.value.scene, 4);
-    }
-    // CHOOSE ATTACK
-    else if (phase == PHASE.CHOOSE_ATTACK) {
-        // enable mouse event to html layer
-        htmlRenderer.domElement.style.pointerEvents = "auto";
-
-        // reset attack choices
-        playerStore.pAttack = "";
-        oppStore.oAttack = "";
-
-        // move choice board in
-        const isChoiceBoardMoveIn = true
-        moveAttackChoiceBoardIn(isChoiceBoardMoveIn, pChoiceC.value.mesh, oChoiceC.value.mesh);
-    }
-    // SUPPORT 1
-    else if (phase == PHASE.SUPPORT1) {
-        moveActiveFieldOut(pAFieldC.value.mesh, pSupportC.value.mesh, oAFieldC.value.mesh, oSupportC.value.mesh); // move active field out
-    }
-    // SUPPORT 2
-    else if (phase == PHASE.SUPPORT2) {
-        moveActiveFieldOut(pAFieldC.value.mesh, pSupportC.value.mesh, oAFieldC.value.mesh, oSupportC.value.mesh); // move active field out
-    }
-    // BATTLE
-    else if (phase == PHASE.BATTLE) {
-        // apply effects
-        await battleManager(sceneC.value.scene);
-    }
-
-    // MOVE THINGS OUT OF FOV
-    if (phase != PHASE.CHOOSE_ATTACK) {
-        htmlRenderer.domElement.style.pointerEvents = "none";
-        const isChoiceBoardMoveIn = false;
-        moveAttackChoiceBoardIn(isChoiceBoardMoveIn, pChoiceC.value.mesh, oChoiceC.value.mesh); // move board out
-    }
-
-    // set OK popup to visible/hidden
-    setOkPopup(phase);
-
-    // Remove glow effect out of FOV in between phases
-    removePulseEffect(sceneC.value.scene)
-};
-
-/**
- * Set opponent attack choice
- * TODO: debug purpose only. remove this later.
- */
-const tempSetOppAttackChoice = (choice) => {
-    oppStore.setOAttack(choice)
-    setTimeout(() => {
-        changePhase(PHASE.SUPPORT1);
-    }, 750);
-}
 
 /**
  * Set active card right from the start
@@ -690,18 +585,7 @@ watch(() => playerStore.pAttack, (attackChoice) => {
     }
 })
 
-// Move in/out attack choice board (DEV MODE)
-const toggleAttackChoice = () => {
-    showAttackChoiceBln.value = !showAttackChoiceBln.value
 
-    // enable mouse event to html layer
-    htmlRenderer.domElement.style.pointerEvents = showAttackChoiceBln.value ? "auto" : "none";
-    attackChoiceBtnStr.value = showAttackChoiceBln.value ? "HIDE" : "SHOW"
-
-    // move choice board in
-    const isChoiceBoardMoveIn = showAttackChoiceBln.value ? true : false;
-    moveAttackChoiceBoardIn(isChoiceBoardMoveIn, pChoiceC.value.mesh, oChoiceC.value.mesh);
-}
 
 // Change scene
 const changeScene = () => {
@@ -711,22 +595,7 @@ const changeScene = () => {
     rendererC.value.three.scene = isCameraFacingBoard.value ? sceneC.value.scene : mainMenuSceneC.value.scene
 }
 
-// Unmount this component and mount main menu
-const returnToMainMenu = (confirmReturn) => {
-    if (playerStore.pWinCount == 3 || oppStore.oWinCount == 3) {
-        stateStore.setShowMainMenu();
-    }
 
-    if (returnBtnConfirm.value) {
-        if (confirmReturn) {
-            stateStore.setShowMainMenu();
-        } else {
-            returnBtnConfirm.value = false
-        }
-    } else {
-        returnBtnConfirm.value = true
-    }
-}
 
 /**
  * Socket test
@@ -743,6 +612,10 @@ const returnToMainMenu = (confirmReturn) => {
 const updateLogMsg = (msg, who) => {    
     const logTime = new Date().toLocaleString();
     logMsg.value += logTime + ` >>> ${who}: ` + msg + "\n----------\n"
+}
+
+const toggleAttackChoice = (isChoiceBoardMoveIn) => {
+    moveAttackChoiceBoardIn(isChoiceBoardMoveIn, pChoiceC.value.mesh, oChoiceC.value.mesh);
 }
 
 /**
@@ -776,5 +649,25 @@ watch(() => stateStore.updateAction, (newUpdate) => {
   
 <style>
 @import '/src/style.css';
+
+.canvas-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.canvas-frame {
+    position: relative;
+    width: 70vw;
+    height: 70vh;
+}
+
+.card-label {
+    background-color: rgba(1, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 14px;
+    /* Add any other CSS styling */
+}
 </style>
-  

@@ -47,24 +47,37 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { useStateStore } from "../../stores/state";
 import { useLocalStateStore } from "../../stores/localState";
+import { useGameStateStore } from "../../stores/gameState";
+import { useGameDataStore } from "../../stores/gameData";
+import { PLAYER_TYPES } from "../../const/const";
 import BaseButton from "../common/BaseButton.vue";
 import BackButton from "../common/BackButton.vue";
 import DeckCover from "../common/DeckCover.vue";
 
 const stateStore = useStateStore();
 const localStateStore = useLocalStateStore();
+const gameStateStore = useGameStateStore();
+const gameDataStore = useGameDataStore();
+const router = useRouter();
 const playerName = ref("");
 const playerDeck = ref(localStateStore.vsCpuPlayerDeck);
-const opponentName = ref("");
 const opponentDeck = ref(localStateStore.vsCpuOpponentDeck);
 
 const startGame = () => {
-  // Game initialization logic here
-  playerName.value = stateStore.player.name;
-  opponentName.value = stateStore.opponent.name;
-  playerDeck.value = stateStore.player.deckName;
-  opponentDeck.value = stateStore.opponent.deckName;
+  // set Player info to GameStateStore
+  const playerDeck = localStateStore.vsCpuPlayerDeck;
+  const playerCards = gameDataStore.getGameReadyCards(playerDeck.cardIds, PLAYER_TYPES.HUMAN, localStateStore.player.id);
+  gameStateStore.setPlayerDetails(playerName.value || playerDeck.deckOwner, playerDeck, playerCards);
+  // set CPU info to GameStateStore
+  const opponentId = "CPU"
+  const opponentDeck = localStateStore.vsCpuOpponentDeck;
+  const opponentCards = gameDataStore.getGameReadyCards(opponentDeck.cardIds, PLAYER_TYPES.CPU_EASY, opponentId);
+  gameStateStore.setOpponentDetails(opponentId, opponentDeck.deckOwner, PLAYER_TYPES.CPU_EASY, opponentDeck, opponentCards);
+  
+  // start game
+  router.push("/play/cpu/game")
 };
 </script>

@@ -120,14 +120,13 @@ import ConfirmDialog from "../common/ConfirmDialog.vue";
 import { useConfirmDialog } from "../../composables/useConfirmDialog";
 import { SPECIALTY } from "../../const/const";
 import { useLocalStateStore } from "../../stores/localState";
+import { useGameDataStore } from "../../stores/gameData";
 
 const { isDialogOpen, dialogMessage, showDialog, handleConfirm, handleCancel } =
   useConfirmDialog();
 
-const url = "http://localhost:3005/api/";
-const prebuildDecks = ref([]);
-
 let localStateStore = useLocalStateStore();
+let gameDataStore = useGameDataStore();
 let decks = ref([]);
 let isMyDecks = ref(true);
 let playDeckId = ref("");
@@ -147,11 +146,6 @@ onMounted(async () => {
     playDeckId.value = localStateStore.vsPlayerDeckId;
   }
 
-  // load all prebuild decks from server
-  const deckRes = await fetch(`${url}decks`);
-  const deckData = await deckRes.json();
-  prebuildDecks.value = deckData;
-
   // show my decks by default
   decks.value = localStateStore.playerDecks;
 });
@@ -160,7 +154,7 @@ watch(isMyDecks, (newVal) => {
   if (newVal) {
     decks.value = localStateStore.playerDecks;
   } else {
-    decks.value = prebuildDecks.value;
+    decks.value = gameDataStore.prebuildDecks;
   }
 });
 
