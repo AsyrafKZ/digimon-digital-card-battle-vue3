@@ -95,6 +95,7 @@ onMounted(() => {
     const unwatch = watch(injectedSceneRef, (newScene) => {
         if (newScene && !css2DObjectInstance.value) { // ensure setup happens only once
             setupObject(newScene);
+            console.log("scene setup complete")
             // unwatch once the scene is set up
             unwatch();
         } else if (!newScene && css2DObjectInstance.value) {
