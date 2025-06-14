@@ -10,6 +10,8 @@ import { useLocalStateStore } from './stores/localState'
 import { useGameDataStore } from './stores/gameData'
 // import and set up Vue router
 import router from './router'
+// import tresjs
+import Tres from "@tresjs/core"
 
 // create an instance of the Vue application
 const app = createApp(App)
@@ -17,12 +19,13 @@ const app = createApp(App)
 // add plugins
 app.use(router)
 app.use(createPinia())
+app.use(Tres)
 
 // initialize Pinia stores
-const gameDataStore = useGameDataStore()
-await gameDataStore.init()
-const localStateStore = useLocalStateStore()
-await localStateStore.init()
+// const gameDataStore = useGameDataStore()
+// await gameDataStore.init()
+// const localStateStore = useLocalStateStore()
+// await localStateStore.init()
 
 
 // this tells Vue to take the application instance (rooted by App.vue)
