@@ -66,18 +66,22 @@ const playerName = ref("");
 const playerDeck = ref(localStateStore.vsCpuPlayerDeck);
 const opponentDeck = ref(localStateStore.vsCpuOpponentDeck);
 
-const startGame = () => {
-  // set Player info to GameStateStore
-  const playerDeck = localStateStore.vsCpuPlayerDeck;
-  const playerCards = gameDataStore.getGameReadyCards(playerDeck.cardIds, PLAYER_TYPES.HUMAN, localStateStore.player.id);
-  gameStateStore.setPlayerDetails(playerName.value || playerDeck.deckOwner, playerDeck, playerCards);
-  // set CPU info to GameStateStore
-  const opponentId = "CPU"
-  const opponentDeck = localStateStore.vsCpuOpponentDeck;
-  const opponentCards = gameDataStore.getGameReadyCards(opponentDeck.cardIds, PLAYER_TYPES.CPU_EASY, opponentId);
-  gameStateStore.setOpponentDetails(opponentId, opponentDeck.deckOwner, PLAYER_TYPES.CPU_EASY, opponentDeck, opponentCards);
-  
-  // start game
-  router.push("/play/cpu/game")
+const startGame = async () => {
+  try {
+    // set Player info to GameStateStore
+    const playerDeck = localStateStore.vsCpuPlayerDeck;
+    const playerCards = gameDataStore.getGameReadyCards(playerDeck.cardIds, PLAYER_TYPES.HUMAN, localStateStore.player.id);
+    gameStateStore.setPlayerDetails(playerName.value || playerDeck.deckOwner, playerDeck, playerCards);
+    // set CPU info to GameStateStore
+    const opponentId = "CPU"
+    const opponentDeck = localStateStore.vsCpuOpponentDeck;
+    const opponentCards = gameDataStore.getGameReadyCards(opponentDeck.cardIds, PLAYER_TYPES.CPU_EASY, opponentId);
+    gameStateStore.setOpponentDetails(opponentId, opponentDeck.deckOwner, PLAYER_TYPES.CPU_EASY, opponentDeck, opponentCards);
+    
+    // start game
+    await router.push("/play/cpu/game")
+  } catch (error) {
+    console.error("Error starting game:", error);
+  }
 };
 </script>
