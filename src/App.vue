@@ -2,7 +2,7 @@
 <!-- This .vue file is a Single File Component (SFC). It contains the template (HTML structure), script (Javasript logic), and style (CSS) for the root of this application -->
 <template>
 
-  <main class="main-menu h-screen content-center">
+  <main class="main-menu h-screen content-center overflow-hidden">
     <!-- routes and render components declared in /src/router/index.js -->
     <RouterView />
   </main>
@@ -15,13 +15,19 @@
 </template>
 
 <script setup>
-import GameBoard from "./components/GameBoard.vue"
-import MainMenu from "./components/MainMenu.vue"
-import { useStateStore } from "./stores/state"
+import { onMounted } from "vue"
+import { useGameDataStore } from "./stores/gameData"
+import { useLocalStateStore } from "./stores/localState"
+
 // import { useConnectionStore } from "./stores/connection";
 // import { socket } from "./socket"
 
-const stateStore = useStateStore();
+onMounted(async () => {
+  const gameDataStore = useGameDataStore()
+  await gameDataStore.init()
+  const localStateStore = useLocalStateStore()
+  await localStateStore.init()
+})
 
 // localStateStore
 // const connectionStore = useConnectionStore();
