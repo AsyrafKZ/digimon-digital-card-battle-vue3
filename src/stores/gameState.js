@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { PLAYER_TYPES, CARD_STATE } from "../const/const";
-import { ref, reactive, computed } from "vue"; // reactive for nested objects if preferred
+import { ref, reactive, computed, shallowRef } from "vue"; // reactive for nested objects if preferred
 
 // Define constants for game phases (enhances readability)
 export const PHASE = {
@@ -17,6 +17,20 @@ export const PHASE = {
   BATTLE: 7,
   END: 0,
 };
+
+const PHASE_SEQUENCE = [
+  PHASE.DRAW,
+  PHASE.REDRAW,
+  PHASE.ENTRANCE,
+  PHASE.RACK_UP_DP,
+  PHASE.DIGIVOLVE_SPECIAL,
+  PHASE.DIGIVOLVE,
+  PHASE.CHOOSE_ATTACK,
+  PHASE.SUPPORT1,
+  PHASE.SUPPORT2,
+  PHASE.BATTLE,
+  PHASE.END,
+];
 
 export const GAME_PHASES = {
   PRE_GAME: "PRE_GAME", // Or 'MAIN_MENU' if showMainMenu is tied to this
@@ -41,6 +55,7 @@ export const useGameStateStore = defineStore("gameState", {
       type: PLAYER_TYPES.HUMAN,
       deck: null, // same deck object structure as in DeckBuilder
       cards: [],
+      hand: [],
       isReady: false,
       loseCount: 0,
     },
@@ -50,6 +65,7 @@ export const useGameStateStore = defineStore("gameState", {
       type: PLAYER_TYPES.CPU_EASY,
       deck: null,
       cards: [],
+      hand: [],
       isReady: false,
       loseCount: 0,
     },
@@ -66,8 +82,11 @@ export const useGameStateStore = defineStore("gameState", {
   getters: {
     currentTurnFirstAttacker: (state) =>
       state.turnActions.currentTurnFirstAttacker,
+    playerDeck() {
+      return this.player.cards.filter(card => card.state === CARD_STATE.DECK);
+    },
     playerDeckCount() {
-        return this.player.cards.filter(card => card.state === CARD_STATE.DECK).length;
+        return this.playerDeck.length;
     },
     opponentDeckCount() {
         return this.opponent.cards.filter(card => card.state === CARD_STATE.DECK).length;
@@ -91,6 +110,24 @@ export const useGameStateStore = defineStore("gameState", {
     opponentActiveMonster() {
         const activeMonster = this.opponent.cards.filter(card => card.state === CARD_STATE.ACTIVE);
         return activeMonster.length > 0 ? activeMonster[0] : placeholderActiveMonster;
+    },
+    topMostClickedCard() {
+      return this.clickedBuffer.length > 0 ? this.clickedBuffer[0] : null;
+    },
+    playerAttackChoice() {
+        return placeholderAttackChoice;
+    },
+    opponentAttackChoice() {
+        return placeholderAttackChoice;
+    },
+    playerHandCount() {
+      return this.player.hand.length;
+    },    
+    opponentHandCount() {
+      return this.opponent.hand.length;
+    },
+    nextPhase() {
+      return PHASE_SEQUENCE[PHASE_SEQUENCE.indexOf(this.phase) + 1];
     }
   },
   actions: {
@@ -132,7 +169,67 @@ export const useGameStateStore = defineStore("gameState", {
       this.opponent.cards = cards;
       this.opponent.loseCount = 0;
     },
+    // game flow
+    setPhase(newPhase) { // PERLU?
+      this.phase = newPhase;
+    },
+    async setNextPhase() {
+      if (this.isProcessingPhaseChange) return;
+      this.isProcessingPhaseChange = true;
+      
+      const currentPhaseIndex = PHASE_SEQUENCE.indexOf(this.phase);
+      let nextPhaseIndex = currentPhaseIndex + 1;
+      if (nextPhaseIndex >= PHASE_SEQUENCE.length) {
+        this.endTurn();
+      }
+      const nextPhase = PHASE_SEQUENCE[nextPhaseIndex];
+      this.phase = nextPhase;
+      await this.handlePhaseEntryLogic(nextPhase);
+    },
 
+    async handlePhaseEntryLogic(phase) {
+      switch (phase) {
+        case PHASE.DRAW:
+          // await boardStore.drawCards(currentTurnActorId)
+          break;
+        case PHASE.REDRAW:
+          break;
+        case PHASE.ENTRANCE:
+          break;
+        case PHASE.RACK_UP_DP:
+          break;
+        case PHASE.DIGIVOLVE_SPECIAL:
+          break;
+        case PHASE.DIGIVOLVE:
+          break;
+        case PHASE.CHOOSE_ATTACK:
+          break;
+        case PHASE.SUPPORT1:
+          break;
+        case PHASE.SUPPORT2:
+          break;
+        case PHASE.BATTLE:
+          break;
+        case PHASE.END:
+          break;
+        default:
+          break;
+      }
+    },
+
+    endTurn() {
+      // TODO: determine next player, reset phase to start, increment turn number
+    },
+    updateCardStatus(actorId, cardUuid, newState) {
+      if (actorId == this.player.id) {
+        this.player.hand.push(cardUuid)
+        const index = this.player.cards.findIndex(card => card.uuid == cardUuid)
+        this.player.cards[index].state = newState;
+      } else {
+        const index = this.opponent.cards.findIndex(card => card.uuid == cardUuid)
+        this.opponent.cards[index].state = newState;
+      }
+    }
   },
 });
 
@@ -143,4 +240,19 @@ const placeholderActiveMonster = {
     xAttack: "",
     xEffect: "",
     hp: "",
+}
+
+const placeholderAttackChoice = {
+  name: "",
+  hp: "",
+  level: "",
+  specialty: "",
+  cAttack: "",
+  tAttack: "",
+  xAttack: "",
+  xEffect: "",
+  cPow: "",
+  tPow: "",
+  xPow: "",
+  xEffectSpeed: "",
 }
