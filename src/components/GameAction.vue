@@ -1,7 +1,14 @@
 <template>
-    <UserButton v-if="showProceedBtn()" id="proceedButtonId" @click="gotoNextPhase(true)"
-    style="bottom: 10vh; left: 1vw; z-index: 999;">
-        NEXT PHASE
+    <!-- <UserButton v-if="showProceedBtn()" id="proceedButtonId" @click="gotoNextPhase(true)" -->
+    <div style="bottom: 10vh; left: 1vw; z-index: 999;" id="returnButtonId">
+        <input type="text" v-model="cardUuid" placeholder="Card UUID">
+        <UserButton v-if="showProceedBtn()" id="testButtonId" @click="temp()">
+            TEST BUTTON
+        </UserButton>
+    </div>
+    <UserButton v-if="showProceedBtn()"  @click="returnCard()"
+    style="bottom: 20vh; left: 1vw; z-index: 999;">
+        RETURN TO DECK
     </UserButton>
 
     <ReadyButton />
@@ -28,30 +35,39 @@
             NO
         </UserButton>
     </div>
+
+    <UserButton v-if="showProceedBtn()" id="proceedButtonId" @click="gotoNextPhase(true)">
+            NEXT PHASE
+    </UserButton>
 </template>
 
 <script setup>
 import { useStateStore } from "../stores/state";
 import { usePlayerStore } from "../stores/player";
 import { useOpponentStore } from "../stores/opponent";
+import { useGameStateStore } from "../stores/gameState";
 import { gotoNextPhase, showProceedBtn } from "./playerManager"
 import { WHO, PHASE } from "../const/const";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import UserButton from "./UserButton.vue"
 import ReadyButton from "./ReadyButton.vue"
-import { CSS2DRenderer } from "../../node_modules/three/examples/jsm/renderers/CSS2DRenderer.js";
+import { useBoardStore } from "../stores/board";
+import { animate } from "animejs";
 
 const emit = defineEmits(['toggleAttackChoice'])
 
 const stateStore = useStateStore();
 const playerStore = usePlayerStore();
 const oppStore = useOpponentStore();
+const boardStore = useBoardStore();
+const gameStateStore = useGameStateStore();
 const router = useRouter();
 
 const showAttackChoiceBln = ref(true);
 const attackChoiceBtnStr = ref("HIDE");
 const returnBtnConfirm = ref(false);
+const cardUuid = ref("");
 
 // set main HTML container
 // const htmlRenderer = new CSS2DRenderer();
@@ -102,14 +118,31 @@ onMounted(() => {
 
 })
 
+const temp = () => {
+    boardStore.moveCardToHand(cardUuid.value, "one");
+    // get card
+}
+
+const returnCard = () => {
+    boardStore.moveCardToDeck(cardUuid.value)
+}
+
 </script>
 
 
 <style scoped>
-#proceedButtonId {
+#testButtonId, #returnButtonId {
     position: absolute;
     bottom: 28vh;
     left: 8vw;
+}
+
+#proceedButtonId {
+    position: absolute;
+    width: fit-content;
+    bottom: 28vh;
+    left: unset !important;
+    right: 8vw !important;
 }
 
 #redrawButton {
