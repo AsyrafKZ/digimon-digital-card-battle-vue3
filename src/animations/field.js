@@ -1,4 +1,4 @@
-import anime from "animejs";
+import { animate } from "animejs";
 import { useStateStore } from "../stores/state";
 import { usePlayerStore } from "../stores/player";
 import { ATTACK, CARD_NAME, WHO } from "../const/const";
