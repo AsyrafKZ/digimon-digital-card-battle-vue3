@@ -13,7 +13,7 @@ const playerDeck = {
 }
 
 const playerHand = {
-    position: { x: -2.65, y1: -2.17, y2: -2.47, z: 0, dx: 1.9 }, // dx = 1.6 for every hand card
+    position: { x: -2.65, y1: -2.17, y2: -2.47, z: 0, dx: 1.9 }, // dx = 1.9 for every hand card
     rotation: { x: 0, y: Math.PI * 2, z1: Math.PI * 2, z2: 0 }, // so, basically y: 0, z: 0??
     scale: { x: 8/5, y: 38/25, z: 1 }
 }
@@ -43,7 +43,7 @@ const opponentDeck = {
 }
 
 const opponentHand = {
-    position: { x: -3.1, y1: 2.2, y2: 2.5, z: 0 }, // dx = 1.9 for every hand card
+    position: { x: -3.1, y1: 2.2, y2: 2.5, z: 0, dx: 1.9 }, // dx = 1.9 for every hand card
     rotation: { x: 0, y: Math.PI * 2, z1: Math.PI * 2, z2: 0 }, // so, basically y: 0, z: 0??
     scale: { x: 8/5, y: 38/25, z: 1 }
 }
@@ -132,9 +132,9 @@ export const useBoardStore = defineStore("board", {
             // get card
             const card = scene.getObjectByName(cardName)
             // get target position
-            const targetPos = playerHand.position;
-            const targetRotation = playerHand.rotation;
-            const targetScale = playerHand.scale;
+            const targetPos = useGameStateStore().isPlayerTurn ? playerHand.position : opponentHand.position;
+            const targetRotation = useGameStateStore().isPlayerTurn ? playerHand.rotation : opponentHand.rotation;
+            const targetScale = useGameStateStore().isPlayerTurn ? playerHand.scale : opponentHand.scale;
             
             // animate
             const tl = createTimeline({

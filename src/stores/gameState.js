@@ -19,6 +19,7 @@ export const PHASE = {
 };
 
 const PHASE_SEQUENCE = [
+  PHASE.PRE_GAME,
   PHASE.DRAW,
   PHASE.REDRAW,
   PHASE.ENTRANCE,
@@ -32,21 +33,12 @@ const PHASE_SEQUENCE = [
   PHASE.END,
 ];
 
-export const GAME_PHASES = {
-  PRE_GAME: "PRE_GAME", // Or 'MAIN_MENU' if showMainMenu is tied to this
-  SETUP: "SETUP", // Players choosing decks, etc.
-  PLAYER_TURN_PLANNING: "PLAYER_TURN_PLANNING",
-  OPPONENT_TURN_PLANNING: "OPPONENT_TURN_PLANNING",
-  BATTLE_RESOLUTION: "BATTLE_RESOLUTION",
-  GAME_OVER: "GAME_OVER",
-};
-
 export const useGameStateStore = defineStore("gameState", {
   state: () => ({
     // --- Core Game State ---
     gameId: "",
     turnNumber: 0, // tracks the overall turn number in the game
-    phase: GAME_PHASES.PRE_GAME, // current phase of the game
+    phase: PHASE.PRE_GAME, // current phase of the game
     currentTurnActor: null, // ID or reference to who's turn it is ('player' or 'opponentId')
     // --- Player and Opponent Information ---
     player: {
@@ -56,6 +48,7 @@ export const useGameStateStore = defineStore("gameState", {
       deck: null, // same deck object structure as in DeckBuilder
       cards: [],
       hand: [],
+      offline: [],
       isReady: false,
       loseCount: 0,
     },
@@ -66,6 +59,7 @@ export const useGameStateStore = defineStore("gameState", {
       deck: null,
       cards: [],
       hand: [],
+      offline: [],
       isReady: false,
       loseCount: 0,
     },
@@ -85,11 +79,14 @@ export const useGameStateStore = defineStore("gameState", {
     playerDeck() {
       return this.player.cards.filter(card => card.state === CARD_STATE.DECK);
     },
+    opponentDeck() {
+      return this.opponent.cards.filter(card => card.state === CARD_STATE.DECK);
+    },
     playerDeckCount() {
         return this.playerDeck.length;
     },
     opponentDeckCount() {
-        return this.opponent.cards.filter(card => card.state === CARD_STATE.DECK).length;
+        return this.opponentDeck.length;
     },
     playerOfflineCount() {
         return this.player.cards.filter(card => card.state === CARD_STATE.OFFLINE).length;
@@ -111,9 +108,6 @@ export const useGameStateStore = defineStore("gameState", {
         const activeMonster = this.opponent.cards.filter(card => card.state === CARD_STATE.ACTIVE);
         return activeMonster.length > 0 ? activeMonster[0] : placeholderActiveMonster;
     },
-    topMostClickedCard() {
-      return this.clickedBuffer.length > 0 ? this.clickedBuffer[0] : null;
-    },
     playerAttackChoice() {
         return placeholderAttackChoice;
     },
@@ -126,13 +120,22 @@ export const useGameStateStore = defineStore("gameState", {
     opponentHandCount() {
       return this.opponent.hand.length;
     },
+    playerOfflineCount() {
+      return this.player.offline.length;
+    },
+    opponentOfflineCount() {
+      return this.opponent.offline.length;
+    },
     nextPhase() {
       return PHASE_SEQUENCE[PHASE_SEQUENCE.indexOf(this.phase) + 1];
+    },
+    isPlayerTurn() {
+      return this.currentTurnActor === this.player.id;
     }
   },
   actions: {
     resetGame() {
-      this.phase = GAME_PHASES.PRE_GAME;
+      this.phase = PHASE.PRE_GAME;
       this.currentTurnActor = null;
       this.turnNumber = 0;
 
@@ -169,56 +172,28 @@ export const useGameStateStore = defineStore("gameState", {
       this.opponent.cards = cards;
       this.opponent.loseCount = 0;
     },
+    setFirstTurnActor(actorId) {
+      console.log("actorId", actorId)
+      this.currentTurnActor = actorId;
+    },
     // game flow
     setPhase(newPhase) { // PERLU?
       this.phase = newPhase;
     },
-    async setNextPhase() {
-      if (this.isProcessingPhaseChange) return;
-      this.isProcessingPhaseChange = true;
-      
+    gotoNextPhase() {
       const currentPhaseIndex = PHASE_SEQUENCE.indexOf(this.phase);
       let nextPhaseIndex = currentPhaseIndex + 1;
       if (nextPhaseIndex >= PHASE_SEQUENCE.length) {
-        this.endTurn();
+        this.gotoNextTurn();
+        return;
       }
       const nextPhase = PHASE_SEQUENCE[nextPhaseIndex];
       this.phase = nextPhase;
-      await this.handlePhaseEntryLogic(nextPhase);
     },
-
-    async handlePhaseEntryLogic(phase) {
-      switch (phase) {
-        case PHASE.DRAW:
-          // await boardStore.drawCards(currentTurnActorId)
-          break;
-        case PHASE.REDRAW:
-          break;
-        case PHASE.ENTRANCE:
-          break;
-        case PHASE.RACK_UP_DP:
-          break;
-        case PHASE.DIGIVOLVE_SPECIAL:
-          break;
-        case PHASE.DIGIVOLVE:
-          break;
-        case PHASE.CHOOSE_ATTACK:
-          break;
-        case PHASE.SUPPORT1:
-          break;
-        case PHASE.SUPPORT2:
-          break;
-        case PHASE.BATTLE:
-          break;
-        case PHASE.END:
-          break;
-        default:
-          break;
-      }
-    },
-
-    endTurn() {
-      // TODO: determine next player, reset phase to start, increment turn number
+    gotoNextTurn() {
+      this.currentTurnActor = this.currentTurnActor === this.player.id ? this.opponent.id : this.player.id;
+      this.turnNumber++;
+      this.phase = PHASE.DRAW;
     },
     updateCardStatus(actorId, cardUuid, newState) {
       if (actorId == this.player.id) {
@@ -226,10 +201,11 @@ export const useGameStateStore = defineStore("gameState", {
         const index = this.player.cards.findIndex(card => card.uuid == cardUuid)
         this.player.cards[index].state = newState;
       } else {
+        this.opponent.hand.push(cardUuid)
         const index = this.opponent.cards.findIndex(card => card.uuid == cardUuid)
         this.opponent.cards[index].state = newState;
       }
-    }
+    },
   },
 });
 

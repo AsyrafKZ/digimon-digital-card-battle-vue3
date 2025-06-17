@@ -69,7 +69,9 @@ const oppStore = useOpponentStore();
 const gameStateStore = useGameStateStore();
 const boardStore = useBoardStore();
 
-const currentTurnStr = ref(`player 1`)
+const currentTurnStr = computed(() => {
+    return gameStateStore.currentTurnActor == gameStateStore.player.id ? "Player" : "Opponent"
+})
 
 onMounted(() => {
     const frameRect = canvasFrameC.value.getBoundingClientRect();

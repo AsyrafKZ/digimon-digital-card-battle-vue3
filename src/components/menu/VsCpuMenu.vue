@@ -77,7 +77,9 @@ const startGame = async () => {
     const opponentDeck = localStateStore.vsCpuOpponentDeck;
     const opponentCards = gameDataStore.getGameReadyCards(opponentDeck.cardIds, PLAYER_TYPES.CPU_EASY, opponentId);
     gameStateStore.setOpponentDetails(opponentId, opponentDeck.deckOwner, PLAYER_TYPES.CPU_EASY, opponentDeck, opponentCards);
-    
+    // set first turn. TODO: randomize this
+    gameStateStore.setFirstTurnActor(gameStateStore.player.id);
+
     // start game
     await router.push("/play/cpu/game")
   } catch (error) {

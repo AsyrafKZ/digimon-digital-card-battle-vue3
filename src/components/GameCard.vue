@@ -68,19 +68,19 @@
     tLvl: { value: lvlTexture }
   }
 
-  watch(() => card.state, (newState) => {
-    if (newState != CARD_STATE.DECK) {
-      console.log("card state changed to", newState)
-      cardC.value.onClick = handleClick
-      cardC.value.onPointerEnter = handlePointerEnter
-      cardC.value.onPointerLeave = handlePointerLeave
-      cardC.value.attach(outlineC.value)
-      // cardC.value.addEventListener("click", handleClick)
-      // cardC.value.addEventListener("pointerover", handlePointerOver)
-      // cardC.value.addEventListener("pointerout", handlePointerOut)
-      console.log("cardC.value", cardC.value)
-    }
-  })
+  // watch(() => card.state, (newState) => {
+  //   if (newState != CARD_STATE.DECK) {
+  //     console.log("card state changed to", newState)
+  //     cardC.value.onClick = handleClick
+  //     cardC.value.onPointerEnter = handlePointerEnter
+  //     cardC.value.onPointerLeave = handlePointerLeave
+  //     cardC.value.attach(outlineC.value)
+  //     // cardC.value.addEventListener("click", handleClick)
+  //     // cardC.value.addEventListener("pointerover", handlePointerOver)
+  //     // cardC.value.addEventListener("pointerout", handlePointerOut)
+  //     console.log("cardC.value", cardC.value)
+  //   }
+  // })
   
   onMounted(async () => {
     cardC.value.name = cardName

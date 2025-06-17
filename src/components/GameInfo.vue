@@ -5,7 +5,7 @@
             <hr>
         </div>
         <div v-for="(phase, index) in phases" class="phase-banner text-3xl font-bold"
-         :class="stateStore.phase == phase  ? 'text-white active-penalty' : 'text-white'"
+         :class="gameStateStore.phase == phase  ? 'text-white active-penalty' : 'text-white'"
          :style="`top: ${8 * (index + 1)}vh;`">
             {{ phaseToName(phase) }}
             <br>
@@ -19,11 +19,13 @@ import { ref, computed } from "vue";
 import { PHASE } from "../const/const";
 import { phaseToName } from "../utils/mapper";
 import { useStateStore } from "../stores/state";
+import { useGameStateStore } from "../stores/gameState";
 
 // props from GameBoard.vue
 const { actor } = defineProps(["actor"]);
 
 const stateStore = useStateStore();
+const gameStateStore = useGameStateStore();
 const phases = computed(() => {
     let phases = []
     for (const phase in PHASE) {

@@ -14,8 +14,7 @@
     <ReadyButton />
     <UserButton
         v-if="stateStore.currentTurn == WHO.PLAYER && (stateStore.phase == PHASE.DRAW || stateStore.phase == PHASE.REDRAW)"
-     id="redrawButton" @click="gotoNextPhase(false)">
-        <!-- style="bottom: 16vh; left: 8vw" id="redrawButton" @click="changePhase(PHASE.REDRAW)"> -->
+     id="redrawButton" @click="gameStateStore.gotoNextPhase()">
         REDRAW
     </UserButton>
     <UserButton v-if="stateStore.phase == PHASE.CHOOSE_ATTACK" id="attackChoiceBoardId" 
@@ -36,8 +35,11 @@
         </UserButton>
     </div>
 
-    <UserButton v-if="showProceedBtn()" id="proceedButtonId" @click="gotoNextPhase(true)">
+    <UserButton v-if="showProceedBtn()" id="proceedButtonId" @click="gameStateStore.gotoNextPhase()">
             NEXT PHASE
+    </UserButton>
+    <UserButton v-if="drawBtnActive" id="proceedButtonId" style="bottom: 10vh;" @click="console.log('draw')">
+            {{ drawBtnStr }}
     </UserButton>
 </template>
 
@@ -46,9 +48,9 @@ import { useStateStore } from "../stores/state";
 import { usePlayerStore } from "../stores/player";
 import { useOpponentStore } from "../stores/opponent";
 import { useGameStateStore } from "../stores/gameState";
-import { gotoNextPhase, showProceedBtn } from "./playerManager"
+import { showProceedBtn } from "./playerManager"
 import { WHO, PHASE } from "../const/const";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import UserButton from "./UserButton.vue"
 import ReadyButton from "./ReadyButton.vue"
@@ -68,6 +70,17 @@ const showAttackChoiceBln = ref(true);
 const attackChoiceBtnStr = ref("HIDE");
 const returnBtnConfirm = ref(false);
 const cardUuid = ref("");
+
+const drawBtnActive = computed(() => gameStateStore.phase == PHASE.DRAW || gameStateStore.phase == PHASE.REDRAW);
+const drawBtnStr = computed(() => {
+    if (gameStateStore.phase == PHASE.DRAW) {
+        return "DRAW"
+    } else if (gameStateStore.phase == PHASE.REDRAW) {
+        return "REDRAW"
+    } else {
+        return ""
+    }
+});
 
 // set main HTML container
 // const htmlRenderer = new CSS2DRenderer();

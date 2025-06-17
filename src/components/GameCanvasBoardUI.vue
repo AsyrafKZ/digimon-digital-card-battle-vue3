@@ -8,12 +8,18 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 import { Plane }from "@tresjs/cientos"
 import { useTexture } from "@tresjs/core"
 import { useTresContext } from "@tresjs/core";
+import { useGameStateStore, PHASE } from "../stores/gameState";
+import { useBoardStore } from "../stores/board";
+import { CARD_STATE } from "../const/const";
 
 const { scene } = useTresContext();
+const gameStateStore = useGameStateStore();
+const boardStore = useBoardStore();
+
 
 const planeData = [
     {
@@ -159,5 +165,26 @@ onMounted(() => {
         scene.value.getObjectByName("infoBoard").attach(mesh)
     })
 })
+
+watch(() => gameStateStore.phase, (newPhase) => {
+    
+    if (newPhase == PHASE.DRAW) {
+        handleDrawPhase()
+    }
+})
+
+const handleDrawPhase = async () => {
+    let handCount = gameStateStore.isPlayerTurn ? gameStateStore.playerHandCount : gameStateStore.opponentHandCount
+    while (handCount < 4) {
+        console.log("handCount", handCount)
+        const deckCards = gameStateStore.isPlayerTurn ? gameStateStore.playerDeck : gameStateStore.opponentDeck
+        const topCard = deckCards[deckCards.length - 1]
+        
+        await boardStore.moveCardToHand(topCard.uuid, handCount, scene.value)
+        gameStateStore.updateCardStatus(gameStateStore.currentTurnActor, topCard.uuid, CARD_STATE.HAND)
+
+        handCount++
+    }
+}
 
 </script>

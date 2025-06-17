@@ -1,4 +1,5 @@
 export const PHASE = {
+    PRE_GAME: -1,
     DRAW: 1,
     REDRAW: 1.5,
     ENTRANCE: 2,

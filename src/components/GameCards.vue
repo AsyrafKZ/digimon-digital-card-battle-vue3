@@ -19,8 +19,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, onUnmounted } from "vue";
-import { useGameStateStore } from "../stores/gameState";
+import { ref, onMounted, onBeforeUnmount, onUnmounted, watch } from "vue";
+import { PHASE, useGameStateStore } from "../stores/gameState";
 import { useBoardStore } from "../stores/board.js";
 import GameCard from "./GameCard.vue"
 import { useTexture, useTresContext } from "@tresjs/core";
