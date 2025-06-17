@@ -19,7 +19,7 @@ const playerHand = {
 }
 
 const playerOffline = {
-    position: { x: -4.23, y: -1.95, z: 0 }, // dZ = 0.002 for every stack
+    position: { x: -4.23, y: -1.95, z: 0, dz: 0.002 }, // dZ = 0.002 for every stack
     rotation: { x: 0, y: 0, z: Math.PI * 5/2 },
     scale: { x: 4/5, y: 4/5, z: 1 }
 }
@@ -49,7 +49,7 @@ const opponentHand = {
 }
 
 const opponentOffline = {
-    position: { x: 4.23, y: 3.09, z: 0 }, // dZ = 0.002 for every stack
+    position: { x: 4.23, y: 3.09, z: 0, dz: 0.002 }, // dZ = 0.002 for every stack
     rotation: { x: 0, y: 0, z: Math.PI * 5/2 },
     scale: { x: 4/5, y: 4/5, z: 1 }
 }
@@ -161,6 +161,38 @@ export const useBoardStore = defineStore("board", {
                 y: targetPos.y2,
                 z: targetPos.z
             }, "200")
+            return tl;
+
+        },
+        async moveCardToOffline(cardName, scene) {
+            // get card
+            const card = scene.getObjectByName(cardName)
+            // get target position
+            const targetPos = useGameStateStore().isPlayerTurn ? playerOffline.position : opponentOffline.position;
+            const targetRotation = useGameStateStore().isPlayerTurn ? playerOffline.rotation : opponentOffline.rotation;
+            const targetScale = useGameStateStore().isPlayerTurn ? playerOffline.scale : opponentOffline.scale;
+            const offlineCount = useGameStateStore().isPlayerTurn ? useGameStateStore().playerOfflineCount : useGameStateStore().opponentOfflineCount;
+            
+            // animate
+            card.position.z = 0.5;
+            const tl = createTimeline({
+                defaults: {
+                    duration: 250,
+                    easing: "cubicBezier(.5, .05, .1, .3)",
+                }
+            })
+            tl.add(card.position, {
+                x: targetPos.x,
+                y: targetPos.y,
+                z: targetPos.z + offlineCount * 0.002,
+            }, "0")
+            tl.add(card.scale, {
+                x: targetScale.x,
+                y: targetScale.y,
+            }, "0")
+            tl.add(card.rotation, {
+                z: targetRotation.z
+            }, "0")
             return tl;
 
         },

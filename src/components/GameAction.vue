@@ -38,7 +38,7 @@
     <UserButton v-if="showProceedBtn()" id="proceedButtonId" @click="gameStateStore.gotoNextPhase()">
             NEXT PHASE
     </UserButton>
-    <UserButton v-if="drawBtnActive" id="proceedButtonId" style="bottom: 10vh;" @click="console.log('draw')">
+    <UserButton v-if="drawBtnActive" id="proceedButtonId" style="bottom: 10vh;" @click="gameStateStore.setPhase(PHASE.REDRAW)">
             {{ drawBtnStr }}
     </UserButton>
 </template>
@@ -74,7 +74,7 @@ const cardUuid = ref("");
 const drawBtnActive = computed(() => gameStateStore.phase == PHASE.DRAW || gameStateStore.phase == PHASE.REDRAW);
 const drawBtnStr = computed(() => {
     if (gameStateStore.phase == PHASE.DRAW) {
-        return "DRAW"
+        return "REDRAW"
     } else if (gameStateStore.phase == PHASE.REDRAW) {
         return "REDRAW"
     } else {

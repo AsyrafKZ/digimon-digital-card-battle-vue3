@@ -18,10 +18,11 @@ export const PHASE = {
   END: 0,
 };
 
+// phases we go through by "Next Phase" button click
+// REDRAW is only triggered by "Redraw" button click
 const PHASE_SEQUENCE = [
   PHASE.PRE_GAME,
   PHASE.DRAW,
-  PHASE.REDRAW,
   PHASE.ENTRANCE,
   PHASE.RACK_UP_DP,
   PHASE.DIGIVOLVE_SPECIAL,
@@ -76,6 +77,7 @@ export const useGameStateStore = defineStore("gameState", {
   getters: {
     currentTurnFirstAttacker: (state) =>
       state.turnActions.currentTurnFirstAttacker,
+    // deck
     playerDeck() {
       return this.player.cards.filter(card => card.state === CARD_STATE.DECK);
     },
@@ -88,12 +90,33 @@ export const useGameStateStore = defineStore("gameState", {
     opponentDeckCount() {
         return this.opponentDeck.length;
     },
+    // hand
+    playerHand() {
+      return this.player.cards.filter(card => card.state === CARD_STATE.HAND);
+    },
+    opponentHand() {
+      return this.opponent.cards.filter(card => card.state === CARD_STATE.HAND);
+    },
+    playerHandCount() {
+      return this.playerHand.length;
+    },    
+    opponentHandCount() {
+      return this.opponentHand.length;
+    },
+    // offline
+    playerOffline() {
+        return this.player.cards.filter(card => card.state === CARD_STATE.OFFLINE);
+    },
+    opponentOffline() {
+        return this.opponent.cards.filter(card => card.state === CARD_STATE.OFFLINE);
+    },
     playerOfflineCount() {
-        return this.player.cards.filter(card => card.state === CARD_STATE.OFFLINE).length;
+        return this.playerOffline.length;
     },
     opponentOfflineCount() {
-        return this.opponent.cards.filter(card => card.state === CARD_STATE.OFFLINE).length;
+        return this.opponentOffline.length;
     },
+    // DP
     playerDpCount() {
         return this.player.cards.filter(card => card.state === CARD_STATE.DP).length;
     },
@@ -113,18 +136,6 @@ export const useGameStateStore = defineStore("gameState", {
     },
     opponentAttackChoice() {
         return placeholderAttackChoice;
-    },
-    playerHandCount() {
-      return this.player.hand.length;
-    },    
-    opponentHandCount() {
-      return this.opponent.hand.length;
-    },
-    playerOfflineCount() {
-      return this.player.offline.length;
-    },
-    opponentOfflineCount() {
-      return this.opponent.offline.length;
     },
     nextPhase() {
       return PHASE_SEQUENCE[PHASE_SEQUENCE.indexOf(this.phase) + 1];
@@ -197,11 +208,9 @@ export const useGameStateStore = defineStore("gameState", {
     },
     updateCardStatus(actorId, cardUuid, newState) {
       if (actorId == this.player.id) {
-        this.player.hand.push(cardUuid)
         const index = this.player.cards.findIndex(card => card.uuid == cardUuid)
         this.player.cards[index].state = newState;
       } else {
-        this.opponent.hand.push(cardUuid)
         const index = this.opponent.cards.findIndex(card => card.uuid == cardUuid)
         this.opponent.cards[index].state = newState;
       }
