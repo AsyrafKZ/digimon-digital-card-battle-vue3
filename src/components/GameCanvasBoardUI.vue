@@ -166,48 +166,4 @@ onMounted(() => {
     })
 })
 
-watch(() => gameStateStore.phase, (newPhase) => {
-    
-    if (newPhase == PHASE.DRAW) {
-        handleDrawPhase()
-    } else if (newPhase == PHASE.REDRAW) {
-        handleRedrawPhase()
-    }
-})
-
-const handleDrawPhase = async () => {
-    let handCount = gameStateStore.isPlayerTurn ? gameStateStore.playerHandCount : gameStateStore.opponentHandCount
-    while (handCount < 4) {
-        console.log("add handCount", handCount)
-        const deckCards = gameStateStore.isPlayerTurn ? gameStateStore.playerDeck : gameStateStore.opponentDeck
-        const topCard = deckCards[deckCards.length - 1]
-        
-        await boardStore.moveCardToHand(topCard.uuid, handCount, scene.value)
-        gameStateStore.updateCardStatus(gameStateStore.currentTurnActor, topCard.uuid, CARD_STATE.HAND)
-
-        handCount++
-    }
-}
-
-const removeCardFromHand = async () => {
-    let handCount = gameStateStore.isPlayerTurn ? gameStateStore.playerHandCount : gameStateStore.opponentHandCount
-    while (handCount > 0) {
-        console.log("remove handCount", handCount)
-        const handCards = gameStateStore.isPlayerTurn ? gameStateStore.playerHand : gameStateStore.opponentHand
-        const card = handCards[handCards.length - 1]
-        
-        await boardStore.moveCardToOffline(card.uuid, scene.value)
-        gameStateStore.updateCardStatus(gameStateStore.currentTurnActor, card.uuid, CARD_STATE.OFFLINE)
-
-        handCount--
-    }
-}
-
-const handleRedrawPhase = async () => {
-    // remove all cards from hand
-    await removeCardFromHand()
-    // draw 4 cards
-    gameStateStore.setPhase(PHASE.DRAW)
-}
-
 </script>

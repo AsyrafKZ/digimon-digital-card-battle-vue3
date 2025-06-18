@@ -14,6 +14,7 @@
                 <GameCanvasTextUINew />
                 <GameCards :actorId="gameStateStore.player.id" />
                 <GameCards :actorId="gameStateStore.opponent.id" />
+                <GameCardUIManager />
             </TresCanvas>
         </div>
     </div>
@@ -53,6 +54,7 @@ import GameCards from "./GameCards.vue";
 import { useBoardStore } from "../stores/board.js";
 import GameCanvasBoardUI from "./GameCanvasBoardUI.vue"
 import GameCanvasTextUINew from "./GameCanvasTextUINew.vue"
+import GameCardUIManager from "./GameCardUIManager.vue"
 
 const canvasFrameC = ref(); // to append CSS2DRenderer's DOM
 const rendererC = ref(); // ref to TroisJS Renderer component
