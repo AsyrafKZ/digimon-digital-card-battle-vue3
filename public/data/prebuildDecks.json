@@ -76,7 +76,7 @@
         }
     },
     {
-        "deckId": 2,
+        "deckId": 5,
         "deckName": "Burning Hot!",
         "deckOwner": "Meramon",
         "cardNames": [
@@ -137,7 +137,7 @@
         }
     },
     {
-        "deckId": 3,
+        "deckId": 8,
         "deckName": "Quick Digivolve",
         "deckOwner": "Vegiemon",
         "cardNames": [
@@ -198,7 +198,7 @@
         }
     },
     {
-        "deckId": 4,
+        "deckId": 12,
         "deckName": "Hearty Meal",
         "deckOwner": "Frigimon",
         "cardNames": [
@@ -263,7 +263,7 @@
         }
     },
     {
-        "deckId": 5,
+        "deckId": 16,
         "deckName": "Toy Party",
         "deckOwner": "Hagurumon",
         "cardNames": [
@@ -329,7 +329,7 @@
         }
     },
     {
-        "deckId": 6,
+        "deckId": 20,
         "deckName": "Get Serious",
         "deckOwner": "Wormmon (second deck)",
         "cardNames": [
@@ -396,7 +396,7 @@
         }
     },
     {
-        "deckId": 7,
+        "deckId": 24,
         "deckName": "Binding Chain",
         "deckOwner": "Digimon Emperor",
         "cardNames": [
@@ -460,7 +460,7 @@
         }
     },
     {
-        "deckId": 8,
+        "deckId": 25,
         "deckName": "Gate of Fire",
         "deckOwner": "Centarumon",
         "cardNames": [
@@ -521,7 +521,7 @@
         }
     },
     {
-        "deckId": 9,
+        "deckId": 28,
         "deckName": "Fire Heart",
         "deckOwner": "Davis",
         "cardNames": [
@@ -586,7 +586,7 @@
         }
     },
     {
-        "deckId": 10,
+        "deckId": 32,
         "deckName": "Magic Strike",
         "deckOwner": "Wizardmon",
         "cardNames": [
@@ -653,7 +653,7 @@
         }
     },
     {
-        "deckId": 11,
+        "deckId": 36,
         "deckName": "Out of Control",
         "deckOwner": "Goburimon",
         "cardNames": [
@@ -713,7 +713,7 @@
         }
     },
     {
-        "deckId": 12,
+        "deckId": 40,
         "deckName": "Spiky",
         "deckOwner": "Togemon",
         "cardNames": [
@@ -775,7 +775,7 @@
         }
     },
     {
-        "deckId": 13,
+        "deckId": 43,
         "deckName": "First Attack",
         "deckOwner": "Birdramon",
         "cardNames": [
@@ -837,7 +837,7 @@
         }
     },
     {
-        "deckId": 14,
+        "deckId": 46,
         "deckName": "Fighting Monsters",
         "deckOwner": "Tuskmon",
         "cardNames": [
@@ -900,7 +900,7 @@
         }
     },
     {
-        "deckId": 15,
+        "deckId": 50,
         "deckName": "Battle Gear",
         "deckOwner": "Leomon",
         "cardNames": [
@@ -962,7 +962,7 @@
         }
     },
     {
-        "deckId": 16,
+        "deckId": 54,
         "deckName": "Digivolution!",
         "deckOwner": "Greymon",
         "cardNames": [
@@ -1022,7 +1022,7 @@
         }
     },
     {
-        "deckId": 17,
+        "deckId": 55,
         "deckName": "Strong-V",
         "deckOwner": "ExVeemon",
         "cardNames": [
@@ -1072,7 +1072,7 @@
         "types": "Fire"
     },
     {
-        "deckId": 18,
+        "deckId": 58,
         "deckName": "Quick Draw",
         "deckOwner": "Hawkmon",
         "cardNames": [
@@ -1137,7 +1137,7 @@
         }
     },
     {
-        "deckId": 19,
+        "deckId": 61,
         "deckName": "Mountain Crusher",
         "deckOwner": "Armadillomon",
         "cardNames": [
@@ -1199,7 +1199,7 @@
         }
     },
     {
-        "deckId": 20,
+        "deckId": 64,
         "deckName": "Blitzkrieg",
         "deckOwner": "Thundermon",
         "cardNames": [
@@ -1261,7 +1261,7 @@
         }
     },
     {
-        "deckId": 21,
+        "deckId": 67,
         "deckName": "Dancing Ghosts",
         "deckOwner": "Bakemon",
         "cardNames": [
@@ -1320,7 +1320,7 @@
         }
     },
     {
-        "deckId": 22,
+        "deckId": 71,
         "deckName": "Friendly",
         "deckOwner": "Patamon",
         "cardNames": [
@@ -1382,7 +1382,7 @@
         }
     },
     {
-        "deckId": 23,
+        "deckId": 74,
         "deckName": "Call of Destiny",
         "deckOwner": "Gatomon (second deck)",
         "cardNames": [
@@ -1446,7 +1446,7 @@
         }
     },
     {
-        "deckId": 24,
+        "deckId": 77,
         "deckName": "Head-On Collision",
         "deckOwner": "Kuwagamon",
         "cardNames": [
@@ -1510,7 +1510,7 @@
         }
     },
     {
-        "deckId": 25,
+        "deckId": 79,
         "deckName": "Fire Heart",
         "deckOwner": "WarGreymon",
         "cardNames": [
@@ -1572,7 +1572,7 @@
         }
     },
     {
-        "deckId": 26,
+        "deckId": 81,
         "deckName": "Three Signs",
         "deckOwner": "Paildramon",
         "cardNames": [
@@ -1632,7 +1632,7 @@
         }
     },
     {
-        "deckId": 27,
+        "deckId": 84,
         "deckName": "Ninja",
         "deckOwner": "Shurimon",
         "cardNames": [
@@ -1695,7 +1695,7 @@
         }
     },
     {
-        "deckId": 28,
+        "deckId": 87,
         "deckName": "Yellow Submarine",
         "deckOwner": "Submarimon",
         "cardNames": [
@@ -1760,7 +1760,7 @@
         }
     },
     {
-        "deckId": 29,
+        "deckId": 90,
         "deckName": "Armed",
         "deckOwner": "Zudomon",
         "cardNames": [
@@ -1823,7 +1823,7 @@
         }
     },
     {
-        "deckId": 30,
+        "deckId": 92,
         "deckName": "Intercepting Traps",
         "deckOwner": "MegaKabuterimon",
         "cardNames": [
@@ -1882,7 +1882,7 @@
         }
     },
     {
-        "deckId": 31,
+        "deckId": 94,
         "deckName": "Divine Sword",
         "deckOwner": "MagnaAngemon",
         "cardNames": [
@@ -1944,7 +1944,7 @@
         }
     },
     {
-        "deckId": 32,
+        "deckId": 96,
         "deckName": "Black King",
         "deckOwner": "GranKuwagamon",
         "cardNames": [
@@ -2008,7 +2008,7 @@
         }
     },
     {
-        "deckId": 33,
+        "deckId": 98,
         "deckName": "Rough Sea King",
         "deckOwner": "MetalSeadramon",
         "cardNames": [
@@ -2070,7 +2070,7 @@
         }
     },
     {
-        "deckId": 34,
+        "deckId": 102,
         "deckName": "4 Strong Monsters",
         "deckOwner": "Piedmon",
         "cardNames": [
@@ -2137,7 +2137,7 @@
         }
     },
     {
-        "deckId": 35,
+        "deckId": 103,
         "deckName": "Miracle Knight's",
         "deckOwner": "Magnamon",
         "cardNames": [
@@ -2202,7 +2202,7 @@
         }
     },
     {
-        "deckId": 36,
+        "deckId": 106,
         "deckName": "Heaven's Gate",
         "deckOwner": "Seraphimon",
         "cardNames": [
@@ -2264,7 +2264,7 @@
         }
     },
     {
-        "deckId": 37,
+        "deckId": 108,
         "deckName": "Forever Increase",
         "deckOwner": "Infermon",
         "cardNames": [
@@ -2322,7 +2322,7 @@
         }
     },
     {
-        "deckId": 38,
+        "deckId": 110,
         "deckName": "Invincible Emperor",
         "deckOwner": "Imperialdramon",
         "cardNames": [
@@ -2389,7 +2389,7 @@
         }
     },
     {
-        "deckId": 39,
+        "deckId": 113,
         "deckName": "Blue Star Red Moon",
         "deckOwner": "Omnimon",
         "cardNames": [
@@ -2450,7 +2450,7 @@
         }
     },
     {
-        "deckId": 40,
+        "deckId": 115,
         "deckName": "Black Fire Heart",
         "deckOwner": "BK WarGreymon",
         "cardNames": [
@@ -2511,7 +2511,7 @@
         }
     },
     {
-        "deckId": 41,
+        "deckId": 117,
         "deckName": "Rose Garden",
         "deckOwner": "Rosemon",
         "cardNames": [
@@ -2575,7 +2575,7 @@
         }
     },
     {
-        "deckId": 42,
+        "deckId": 120,
         "deckName": "Darkness Wave",
         "deckOwner": "A “Analogman”",
         "cardNames": [
@@ -2645,7 +2645,7 @@
         "types": "Darkness"
     },
     {
-        "deckId": 43,
+        "deckId": 121,
         "deckName": "Red",
         "deckOwner": "[Veemon's starting deck]",
         "cardNames": [
@@ -2712,7 +2712,7 @@
         }
     },
     {
-        "deckId": 44,
+        "deckId": 124,
         "deckName": "Flame",
         "deckOwner": "[given from Davis, if Veemon is not partner]",
         "cardNames": [
@@ -2779,7 +2779,7 @@
         }
     },
     {
-        "deckId": 45,
+        "deckId": 127,
         "deckName": "Holse A.K.A Halse Deck",
         "deckOwner": "[given from Keely, if Hawkmon is not partner]",
         "cardNames": [
@@ -2846,7 +2846,7 @@
         }
     },
     {
-        "deckId": 46,
+        "deckId": 129,
         "deckName": "Dig",
         "deckOwner": "[given from Cody, if Armadillomon is not partner]",
         "cardNames": [
@@ -2913,7 +2913,7 @@
         }
     },
     {
-        "deckId": 47,
+        "deckId": 131,
         "deckName": "Pegasus",
         "deckOwner": "[given from T.K., if Patamon is not partner]",
         "cardNames": [
@@ -2980,7 +2980,7 @@
         }
     },
     {
-        "deckId": 48,
+        "deckId": 133,
         "deckName": "Neferti",
         "deckOwner": "[given from Kari, if Gatomon is not partner]",
         "cardNames": [
@@ -3047,7 +3047,7 @@
         }
     },
     {
-        "deckId": 49,
+        "deckId": 135,
         "deckName": "Shadra",
         "deckOwner": "[given from Ken, if Wormmon is not partner]",
         "cardNames": [
@@ -3114,7 +3114,7 @@
         }
     },
     {
-        "deckId": 50,
+        "deckId": 137,
         "deckName": "Practice",
         "deckOwner": "[given from Betamon in Betamon's duel tutorial]",
         "cardNames": [

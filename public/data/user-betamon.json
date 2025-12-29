@@ -1,0 +1,7 @@
+{
+    "userId": "1",
+    "userName": "Betamon",
+    "deckIds": ["1","138"],
+    "isPlayer": 0,
+    "_comments": "'deckId' isnt random. If n <= 138, they are premade deckId (refer to all-base-decks.json). Else, they are IDs for newly created decks."
+}

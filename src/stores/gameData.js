@@ -2,6 +2,8 @@ import { defineStore } from "pinia";
 import { SPECIALTY_DETAILS, PLAYER_TYPES, CARD_STATE } from "../const/const";
 
 const OPTION_CARD_FIRST_ID = 191;
+const DEFAULT_CPU_ID = "1";
+const DEFAULT_PLAYER_ID = "2";
 
 export const useGameDataStore = defineStore("gameData", {
   state: () => ({
@@ -94,6 +96,20 @@ export const useGameDataStore = defineStore("gameData", {
             gameReadyCards.push(gameReadyCard)
         })
         return gameReadyCards
+    },
+    // TODO: change to firebase db
+    // get mock user
+    async getUserById(id) {
+      let userInfo = {};
+
+      // for now, use mock user that is read from either data/user-userA.json or data/user-betamon.json (for NPCs)
+      if (id == DEFAULT_PLAYER_ID) {
+          userInfo = await fetch("/data/user-userA.json");;
+      } else if (id == DEFAULT_CPU_ID) {
+          userInfo = await fetch("/data/user-betamon.json");; // betamon
+      }
+
+      return userInfo.json();
     }
   },
 });
