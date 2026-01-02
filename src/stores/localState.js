@@ -25,8 +25,11 @@ export const useLocalStateStore = defineStore("localState", {
       id: "",
       name: ""
     },
+    // user's deck info for VS CPU
     vsCpuPlayerDeck: JSON.parse(JSON.stringify(deck)),
+    // CPU's deck info for VS CPU
     vsCpuOpponentDeck: JSON.parse(JSON.stringify(deck)),
+    // user's deck info for VS online play (pvp)
     vsPlayerDeck: JSON.parse(JSON.stringify(deck)),
     playerDecks: [],
     musicVolume: "",
@@ -56,7 +59,7 @@ export const useLocalStateStore = defineStore("localState", {
         );
         this.playerDecks = myDecks;
       } else {
-        // TODO: in the case of first time player, there shouldnt be any deck saved yet.
+        // TODO: in the case of first time player, there shouldnt be any deck saved in the local storage yet.
         // so either fill in betamon tutorial deck or make it empty and let the player choose their deck.
         // for the latter, i need to add null check to all /play/cpu components to display empty deck.
         const newDeck = await this.createNewDeckForLocalStorage();
@@ -72,11 +75,13 @@ export const useLocalStateStore = defineStore("localState", {
         localStorage.getItem(LOCAL_STORAGE_PLAY_DECK_KEY) ??
         DEFAULT_PLAYER_DECK_ID;
       await this.updateVsCpuPlayerDeck(vsCpuPlayerDeckId);
+      
       // Load latest VS CPU Opponent Deck ID from local storage(TODO: fetch from firebase auth)
       const vsCpuOpponentDeckId =
         localStorage.getItem(LOCAL_STORAGE_OPPONENT_PLAY_DECK_KEY) ??
         DEFAULT_CPU_DECK_ID;
       await this.updateVsCpuOpponentDeck(vsCpuOpponentDeckId);
+
       // Load latest VS Player Deck ID from local storage (TODO: fetch from firebase auth)
       const vsPlayerDeckId =
         localStorage.getItem(LOCAL_STORAGE_ONLINE_PLAY_DECK_KEY) ??

@@ -8,6 +8,7 @@ import GameBoardView from '../components/GameBoard.vue'
 
 const routes = [
   {
+    // homepage
     path: '/',
     name: 'MainMenu',
     component: MainMenuView
@@ -25,7 +26,7 @@ const routes = [
         name: 'CpuDeckSelect',
         component: DeckBuilderView,
         props: (route) => ({
-          who: route.query.who,
+          player: route.query.player,
         })
       },
       {
@@ -48,7 +49,7 @@ const routes = [
         name: 'PlayerDeckSelect',
         component: DeckBuilderView,
         props: (route) => ({
-          who: route.query.who,
+          player: route.query.player,
         })
       }
     ],
@@ -57,28 +58,6 @@ const routes = [
     path: '/build',
     name: 'DeckBuilder',
     component: () => import('../components/menu/DeckBuilder.vue'),
-    // children: [
-    //   {
-    //     path: 'create-new',
-    //     name: 'CreateNewDeck',
-    //     component: () => import('../components/menu/CreateNewDeck.vue')
-    //   },
-    //   {
-    //     path: 'edit-existing',
-    //     name: 'EditExistingDeck',
-    //     component: () => import('../components/menu/EditExistingDeck.vue')
-    //   },
-    //   {
-    //     path: 'prebuilds',
-    //     name: 'Prebuilds',
-    //     component: () => import('../components/menu/Prebuilds.vue')
-    //   },
-    //   {
-    //     path: 'card-database',
-    //     name: 'CardDatabase',
-    //     component: () => import('../components/menu/CardDatabase.vue')
-    //   }
-    // ]
   },   
   {
     path: '/build/deck',

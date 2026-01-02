@@ -2,18 +2,29 @@
     <div class="canvas-container">
         <div class="canvas-frame" ref="canvasFrameC">
             <TresCanvas clear-color="#183141" render-mode="on-demand">
+                <!-- shows fps etc on top left of screen -->
                 <Stats />
-                <OrbitControls />
+                
+                <!-- allows gameboard rotation while holding left mouse -->
+                <!-- <OrbitControls /> -->
+
                 <TresPerspectiveCamera :position="[0, 0, 10]" />
                 <TresAmbientLight ref="lightC" :position="[0, 0, 10]" :intensity="1" />
 
+                <!-- Game Board Parts -->
                 <Suspense>
                     <GameCanvasBoardUI />
                 </Suspense>
-                <!-- <GameCanvasTextUI /> -->
-                <GameCanvasTextUINew />
+
+                <!-- Game Board Texts -->
+                <GameCanvasTextUI />
+
+                <!-- User cards (bottom side of screen) -->
                 <GameCards :actorId="gameStateStore.player.id" />
+                <!-- Opponent cards (could be CPU or online player. top side of screen) -->
                 <GameCards :actorId="gameStateStore.opponent.id" />
+                
+                <!--  -->
                 <GameCardUIManager />
             </TresCanvas>
         </div>
@@ -53,7 +64,7 @@ import GamePhaseDevTools from "./GamePhaseDevTools.vue";
 import GameCards from "./GameCards.vue";
 import { useBoardStore } from "../stores/board.js";
 import GameCanvasBoardUI from "./GameCanvasBoardUI.vue"
-import GameCanvasTextUINew from "./GameCanvasTextUINew.vue"
+import GameCanvasTextUI from "./GameCanvasTextUI.vue"
 import GameCardUIManager from "./GameCardUIManager.vue"
 
 const canvasFrameC = ref(); // to append CSS2DRenderer's DOM

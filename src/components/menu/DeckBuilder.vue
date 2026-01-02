@@ -114,11 +114,11 @@ import BaseButton from "../common/BaseButton.vue";
 import BackButton from "../common/BackButton.vue";
 import DeckCover from "../common/DeckCover.vue";
 
-import { computed, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { playSelectClickSound, playHoverSound } from "../../utils/audio";
 import ConfirmDialog from "../common/ConfirmDialog.vue";
 import { useConfirmDialog } from "../../composables/useConfirmDialog";
-import { SPECIALTY } from "../../const/const";
+import { PLAYER } from "../../const/const";
 import { useLocalStateStore } from "../../stores/localState";
 import { useGameDataStore } from "../../stores/gameData";
 
@@ -137,9 +137,9 @@ const isSelect = route.path.includes("select");
 
 onMounted(async () => {
   if (route.path.includes("play/cpu")) {
-    if (route.query.who === "player") {
+    if (route.query.player === PLAYER.USER) {
         playDeckId.value = localStateStore.vsCpuPlayerDeckId;
-    } else if (route.query.who === "opponent") {
+    } else if (route.query.player === PLAYER.CPU) {
       playDeckId.value = localStateStore.vsCpuOpponentDeckId;
     }
   } else {
@@ -161,10 +161,10 @@ watch(isMyDecks, (newVal) => {
 // Store selected deck ID in localStorage for game use
 const selectAsPlayDeck = (deckId) => {
   if (route.path.includes("play/cpu")) {
-    if (route.query.who === "player") {
+    if (route.query.player === PLAYER.USER) {
       playDeckId.value = deckId;
       localStateStore.updateVsCpuPlayerDeck(deckId);
-    } else if (route.query.who === "opponent") {
+    } else if (route.query.player === PLAYER.CPU) {
       playDeckId.value = deckId;
       localStateStore.updateVsCpuOpponentDeck(deckId);
     }

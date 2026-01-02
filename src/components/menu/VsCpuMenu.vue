@@ -13,26 +13,27 @@
           v-model="playerName"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-3xl text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
         />
-        <!-- Player Deck selection -->
+        <!-- Deck Selection -->
         <div class="flex flex-row justify-around my-2">
+          <!-- Player Deck selection -->
           <div class="flex flex-col bg-sky-100/80 w-1/2 h-fit rounded-lg shadow-md p-2 hover:shadow-lg transition-all border-2">
             <p class="text-3xl text-sky-900 font-bold my-1">
               Player Deck:
             </p>
             <DeckCover :deck="playerDeck" :enlarge="true">
             </DeckCover>
-            <RouterLink to="/play/cpu/select?who=player">
+            <RouterLink to="/play/cpu/select?player=user">
               <BaseButton class="mt-12"> CHANGE DECK </BaseButton>
             </RouterLink>
           </div>
+          <!-- Opponent Deck Selection -->
           <div class="flex flex-col bg-sky-100/80 w-1/2 h-fit rounded-lg shadow-md p-2 hover:shadow-lg transition-all border-2">
-            <!-- Opponent Deck Selection -->
             <p class="text-3xl text-sky-900 font-bold my-1">
               Opponent Deck:
             </p>
             <DeckCover :deck="opponentDeck" :enlarge="true">
             </DeckCover>
-            <RouterLink to="/play/cpu/select?who=opponent">
+            <RouterLink to="/play/cpu/select?player=cpu">
               <BaseButton class="mt-12"> CHANGE DECK </BaseButton>
             </RouterLink>
           </div>
@@ -46,9 +47,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useStateStore } from "../../stores/state";
 import { useLocalStateStore } from "../../stores/localState";
 import { useGameStateStore } from "../../stores/gameState";
 import { useGameDataStore } from "../../stores/gameData";
@@ -57,7 +57,6 @@ import BaseButton from "../common/BaseButton.vue";
 import BackButton from "../common/BackButton.vue";
 import DeckCover from "../common/DeckCover.vue";
 
-const stateStore = useStateStore();
 const localStateStore = useLocalStateStore();
 const gameStateStore = useGameStateStore();
 const gameDataStore = useGameDataStore();
@@ -71,17 +70,22 @@ const startGame = async () => {
     // set Player info to GameStateStore
     const playerDeck = localStateStore.vsCpuPlayerDeck;
     const playerCards = gameDataStore.getGameReadyCards(playerDeck.cardIds, PLAYER_TYPES.HUMAN, localStateStore.player.id);
+    
     gameStateStore.setPlayerDetails(playerName.value || playerDeck.deckOwner, playerDeck, playerCards);
+    
     // set CPU info to GameStateStore
     const opponentId = "CPU"
     const opponentDeck = localStateStore.vsCpuOpponentDeck;
     const opponentCards = gameDataStore.getGameReadyCards(opponentDeck.cardIds, PLAYER_TYPES.CPU_EASY, opponentId);
+    
     gameStateStore.setOpponentDetails(opponentId, opponentDeck.deckOwner, PLAYER_TYPES.CPU_EASY, opponentDeck, opponentCards);
+    
     // set first turn. TODO: randomize this
     gameStateStore.setFirstTurnActor(gameStateStore.player.id);
 
     // start game
     await router.push("/play/cpu/game")
+  
   } catch (error) {
     console.error("Error starting game:", error);
   }

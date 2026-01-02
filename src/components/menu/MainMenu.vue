@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col items-center justify-center h-screen">
+    <!-- Homepage Title -->
     <p class="text-center text-7xl text-sky-400 my-4 title-text">
       <a href="#" class="underline">Digimon Digital Card Battle</a>
     </p>
@@ -8,6 +9,7 @@
         rounded-3xl shadow-2xl border-4 border-sky-300/50 
         backdrop-blur-sm 
         transform transition-all duration-300 hover:shadow-sky-400/50">
+      <!-- List of menus -->
       <RouterLink v-for="route in routes" :key="route.path" :to="route.path">
         <BaseButton>
           {{ route.name }}

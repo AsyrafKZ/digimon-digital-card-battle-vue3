@@ -66,9 +66,15 @@ export const CARD_NAME = {
     OPP: "oCard",
 }
 
+// TODO: replace all WHO.PLAYER => PLAYER.USER, WHO.OPP => PLAYER.CPU
+// there were times using "who.*" were confusing. also who doesnt sound professional
 export const WHO = {
     PLAYER: "PLAYER",
     OPP: "OPPONENT",
+}
+export const PLAYER = {
+    USER: "user", // human user
+    CPU: "cpu"
 }
 
 export const COLOR_CODE = {

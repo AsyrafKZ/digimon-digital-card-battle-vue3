@@ -29,7 +29,7 @@
         >
           <p class="text-3xl text-sky-900 font-bold my-1">Player Deck:</p>
           <DeckCover :deck="playerDeck" :enlarge="true"> </DeckCover>
-          <RouterLink to="/play/online/select?who=player">
+          <RouterLink to="/play/online/select?player=user">
             <BaseButton class="mt-12"> CHANGE DECK </BaseButton>
           </RouterLink>
         </div>
@@ -46,7 +46,6 @@ import { useLocalStateStore } from "../../stores/localState";
 import BaseButton from "../common/BaseButton.vue";
 import BackButton from "../common/BackButton.vue";
 import DeckCover from "../common/DeckCover.vue";
-// import { socket } from '@/socket'
 
 const roomNumber = ref("");
 const localStateStore = useLocalStateStore();
@@ -54,6 +53,6 @@ const playerDeck = ref(localStateStore.vsPlayerDeck);
 const playerName = ref("");
 
 const joinRoom = () => {
-  // Room joining logic here
+  // TODO: Room joining logic here
 };
 </script>
