@@ -4,7 +4,7 @@
             <GameCard v-for="card in cards" :key="card.uuid" :card="card" :actorId="actorId" />
         </Suspense>
         <!-- The single interaction plane for click event -->
-        <Suspense>
+        <!-- <Suspense>
             <TresSprite
                 ref="deckInteractionC"
                 :position="[-4.25, -3.07, 0]"
@@ -14,7 +14,7 @@
                 <TresPlaneGeometry :args="[1.1, 1.4]" />
                 <TresSpriteMaterial :map="deckTexture" :rotation="Math.PI * 1/2" />
             </TresSprite>
-        </Suspense>
+        </Suspense> -->
     </TresGroup>
 </template>
 
@@ -23,7 +23,8 @@ import { ref, onMounted, onBeforeUnmount, onUnmounted, watch } from "vue";
 import { PHASE, useGameStateStore } from "../stores/gameState";
 import { useBoardStore } from "../stores/board.js";
 import GameCard from "./GameCard.vue"
-import { useTexture, useTresContext } from "@tresjs/core";
+import { useTres } from "@tresjs/core";
+import { useTexture } from "@tresjs/cientos";
 import { CARD_STATE } from "../const/const.js";
 
 // props
@@ -33,9 +34,9 @@ const deckC = ref();
 const gameStateStore = useGameStateStore()
 const boardStore = useBoardStore();
 const cards = ref([])
-const deckInteractionC = ref();
+// const deckInteractionC = ref();
 const deckTexture = ref();
-const { scene } = useTresContext();
+const { scene } = useTres();
 
 
 onMounted(async () => {
@@ -47,14 +48,14 @@ onMounted(async () => {
         cards.value = gameStateStore.opponent.cards
     }
 
-    const { map: backTextureMap } = await useTexture({map: "/src/sprites/common/card-back.png"});
-    deckTexture.value = backTextureMap;
+    const { state: backTextureMap } = await useTexture("/src/sprites/common/card-back.png");
+    deckTexture.value = backTextureMap.value;
 
-    deckInteractionC.value.onPointerMove = null
-    deckInteractionC.value.onPointerEnter = null
-    deckInteractionC.value.onPointerLeave = null
-    deckInteractionC.value.onPointerDown = null
-    deckInteractionC.value.onPointerUp = null
+    // deckInteractionC.value.onPointerMove = null
+    // deckInteractionC.value.onPointerEnter = null
+    // deckInteractionC.value.onPointerLeave = null
+    // deckInteractionC.value.onPointerDown = null
+    // deckInteractionC.value.onPointerUp = null
 })
 
 onUnmounted(() => {

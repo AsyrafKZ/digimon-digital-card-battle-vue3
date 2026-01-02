@@ -3,12 +3,12 @@
 
 <script setup>
 import { watch } from "vue";
-import { useTresContext } from "@tresjs/core";
+import { useTres } from "@tresjs/core";
 import { useGameStateStore, PHASE } from "../stores/gameState";
 import { useBoardStore } from "../stores/board";
 import { CARD_STATE } from "../const/const";
 
-const { scene } = useTresContext();
+const { scene } = useTres();
 const gameStateStore = useGameStateStore();
 const boardStore = useBoardStore();
 

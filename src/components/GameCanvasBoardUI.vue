@@ -8,21 +8,17 @@
 </template>
 
 <script setup>
-import { onMounted, watch } from "vue";
+import { onMounted } from "vue";
 import { Plane }from "@tresjs/cientos"
-import { useTexture } from "@tresjs/core"
-import { useTresContext } from "@tresjs/core";
-import { useGameStateStore, PHASE } from "../stores/gameState";
-import { useBoardStore } from "../stores/board";
-import { CARD_STATE } from "../const/const";
+import { useTexture } from "@tresjs/cientos"
+import { useTres } from "@tresjs/core";
 
-const { scene } = useTresContext();
-const gameStateStore = useGameStateStore();
-const boardStore = useBoardStore();
+const { scene } = useTres();
 
-
+// game board parts
 const planeData = [
     {
+        // opponent hand part (top part of the board: life, 4 hand cards, offline and deck cards)
         id: "oField",
         ref: "oField",
         width: 12,
@@ -32,6 +28,7 @@ const planeData = [
         texturePath: "/src/sprites/opponent-field.png",
     },
     {
+        // opponent active digimon part (orange colored center-right part of the board)
         id: "oAField",
         ref: "oAField",
         width: 5.4,
@@ -41,6 +38,7 @@ const planeData = [
         texturePath: "/src/sprites/opponent-active-field.png",
     },
     {
+        // opponent support bracket part
         id: "oSupport",
         ref: "oSupport",
         width: 2.2,
@@ -50,6 +48,7 @@ const planeData = [
         texturePath: "/src/sprites/opponent-support-bracket.png",
     },
     {
+        // user-player active digimon part (blue colored center-left part of the board)
         id: "pAField",
         ref: "pAField",
         width: 5.4,
@@ -59,6 +58,7 @@ const planeData = [
         texturePath: "/src/sprites/player-active-field.png",
     },
     {
+        // user-player support bracket part
         id: "pSupport",
         ref: "pSupport",
         width: 2.2,
@@ -68,6 +68,7 @@ const planeData = [
         texturePath: "/src/sprites/player-support-bracket.png",
     },
     {
+        // user-player hand part (bottom part of the board: offline and deck cards, life, 4 hand cards)
         id: "pField",
         ref: "pField",
         width: 12,
@@ -77,6 +78,7 @@ const planeData = [
         texturePath: "/src/sprites/player-field.png",
     },
     {
+        // opponent attack choice part (displayed from top of the screen during attack choice phase)
         id: "oChoice",
         ref: "oChoice",
         width: 12,
@@ -86,6 +88,7 @@ const planeData = [
         texturePath: "/src/sprites/choose-attack-opp.png",
     },
     {
+        // user-player attack choice part (displayed from top of the screen during attack choice phase)
         id: "pChoice",
         ref: "pChoice",
         width: 12,
@@ -95,6 +98,7 @@ const planeData = [
         texturePath: "/src/sprites/choose-attack-player.png",
     },
     {
+        // card details display part (showed up from left side of the screen)
         id: "infoBoard",
         ref: "infoBoard",
         width: 12,
@@ -104,15 +108,17 @@ const planeData = [
         texturePath: "/src/sprites/info-board.png",
     },
     {
+        // default image on the card details display part?
         id: "infoBoardImg",
         ref: "infoBoardImg",
         width: 3,
         height: 2.7,
         position: [-21.45, 2.65, 0.3],
         rotation: [0, 0, 0],
-        texturePath: "/src/sprites/monsters/175.jpg",
+        texturePath: "/src/sprites/monsters/175.jpg", // veemon
     },
     {
+        // yellow colored banner that shows current turn player
         id: "firstAttackBanner",
         ref: "firstAttackBanner",
         width: 1,
@@ -123,16 +129,18 @@ const planeData = [
     }
 ]
 
+// the Promise here is why the <Suspense> tag in GameBoard.vue is added
 const loadedPlanesData = await Promise.all(planeData.map(async (config) => {
-    const { map: textureMap } = await useTexture({map: config.texturePath})
+    const { state: textureMap } = await useTexture(config.texturePath)
     return {
         ...config,
-        textureMap,
+        textureMap: textureMap.value,
     }
 }))
 
 onMounted(() => {
-    // attach text labels to board planes
+    // attach text labels to each board parts
+    // these labels are defined in GameCanvasTextUI.vue
     const playerActiveFieldLabels = ["pDpCount", "pActiveNm", "pActiveC", "pActiveT", "pActiveX", "pActiveXEff", "pActiveHpLbl", "pActiveHp"]
     const opponentActiveFieldLabels = ["oDpCount", "oActiveNm", "oActiveC", "oActiveT", "oActiveX", "oActiveXEff", "oActiveHpLbl", "oActiveHp"]
     const playerChoiceLabels = ["pChoiceNm", "pChoiceHp", "pChoiceLevel", "pChoiceSp", "pChoiceONm", "pChoiceTNm", "pChoiceXNm", "pChoiceXEff", "pChoiceOVal", "pChoiceTVal", "pChoiceXVal", "pChoiceXSpd", "pChoiceTurn"]

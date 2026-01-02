@@ -9,7 +9,7 @@
   <script setup>
   import { ref, onMounted, computed, watch } from "vue";
   import * as THREE from "three";
-  import { useTexture } from "@tresjs/core";
+  import { useTexture } from "@tresjs/cientos";
   import vertexShader from "../shaders/vertex.glsl.js";
   import fragmentShader from "../shaders/fragment.glsl.js";
   import { useStateStore } from "../stores/state.js";
@@ -18,11 +18,11 @@
   import { useBoardStore } from "../stores/board.js";
   import { PHASE, CARD_NAME, WHO, LEVEL, MODE, CARD_STATE } from "../const/const.js";
   import { hexToRgb } from "../utils/mapper.js"
-  import { useTresContext } from "@tresjs/core";
+  import { useTres } from "@tresjs/core";
   
   // props
   const { card, actorId } = defineProps(["card", "actorId"]);
-  const { scene } = useTresContext();
+  const { scene } = useTres();
   // emit to GameBoard.vue
   // const emit = defineEmits(["click", "pointerOver"]);
   // refs
@@ -43,8 +43,9 @@
   const fShader = fragmentShader
       .replace("##COLOR_TOP", colorTopRgb)
       .replace("##COLOR_BOTTOM", colorBottomRgb);
-  const { map: backTextureMap } = await useTexture({map: "/src/sprites/common/card-back.png"});
-  const { map: monsterTextureMap } = await useTexture({map: card.sprite});
+  const { state: backTextureMap } = await useTexture("/src/sprites/common/card-back.png");
+  const { state: monsterTextureMap } = await useTexture(card.sprite);
+  const maps = await Promise.all([backTextureMap.value, monsterTextureMap.value]);
 
   // level texture
   const lvlCanvas = document.createElement("canvas");
@@ -61,7 +62,6 @@
   }
   const lvlTexture = new THREE.CanvasTexture(lvlCanvas);
 
-  const maps = await Promise.all([backTextureMap, monsterTextureMap]);
   const uniforms = {
     tBack: { value: maps[0] },
     tImg: { value: maps[1] },
@@ -87,6 +87,12 @@
     
     // set position and flip the card to show the back side
     boardStore.setInitCard(cardName, actorId, scene.value)
+
+    // if top card of a deck, add click event
+    if (gameStateStore.userDeckTopCard.uuid == card.uuid) {
+      console.log("top card:", cardName, card.id)
+      cardC.value.onClick = handleClick
+    }
   });
 
   function handleClick(event) {

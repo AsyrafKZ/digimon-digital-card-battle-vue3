@@ -142,6 +142,9 @@ export const useGameStateStore = defineStore("gameState", {
     },
     isPlayerTurn() {
       return this.currentTurnActor === this.player.id;
+    },
+    userDeckTopCard() {
+      return this.playerDeck[this.playerDeckCount - 1]
     }
   },
   actions: {
