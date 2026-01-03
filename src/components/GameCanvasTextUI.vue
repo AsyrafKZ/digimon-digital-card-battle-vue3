@@ -1,5 +1,13 @@
 <template>
     <TresGroup>
+    <Html :position="[-20, 0, 5]" center name="bigBanner" v-if="isBannerVisible">
+        <div class="text-9xl text-center text-white font-bold w-screen">
+            GAME START
+        </div>
+    </Html>
+    <Html :position="[0, 0, 0]" center name="bigBannerBg" v-if="isBannerVisible">
+        <div class="bg-sky-500 w-screen h-28"></div>
+    </Html>
     <!-- player deck count -->
     <Html :position="[-5.25, -3.05, 0]" center @click="onClick">
         <div id="pDeckCount" class="card-count">
@@ -582,8 +590,12 @@
 import { ref, onMounted } from "vue";
 import { useGameStateStore } from "../stores/gameState"
 import { Html } from "@tresjs/cientos";
+import { animate } from "animejs";
+import { useTres } from "@tresjs/core"
 
 const testHtml = ref("hello world ref");
+const isBannerVisible = ref(true);
+const { scene } = useTres();
 const gameStateStore = useGameStateStore();
 console.log("gameStateStore.player.cards.length", gameStateStore.player.cards.length)
 
@@ -617,6 +629,16 @@ function onClick(event) {
 
 onMounted(() => {
     fetchAsyncData();
+
+    // show GAME START banner and automatically draw cards in
+    const banner = scene.value.getObjectByName("bigBanner");
+    animate(banner.position, {
+        x: [-10, 10],
+        ease: 'outInExpo',
+        delay: 500,
+        duration: 2000,
+        onComplete: self => isBannerVisible.value = false
+    })
 })
 
 </script>
