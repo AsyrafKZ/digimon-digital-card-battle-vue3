@@ -1,6 +1,5 @@
 <template>
-    <!-- <UserButton v-if="showProceedBtn()" id="proceedButtonId" @click="gotoNextPhase(true)" -->
-    <div style="bottom: 10vh; left: 1vw; z-index: 999;" id="returnButtonId">
+    <!-- <div style="bottom: 10vh; left: 1vw; z-index: 999;" id="returnButtonId">
         <input type="text" v-model="cardUuid" placeholder="Card UUID">
         <UserButton v-if="showProceedBtn()" id="testButtonId" @click="temp()">
             TEST BUTTON
@@ -9,7 +8,7 @@
     <UserButton v-if="showProceedBtn()"  @click="returnCard()"
     style="bottom: 20vh; left: 1vw; z-index: 999;">
         RETURN TO DECK
-    </UserButton>
+    </UserButton> -->
 
     <ReadyButton />
     <UserButton
@@ -131,14 +130,14 @@ onMounted(() => {
 
 })
 
-const temp = () => {
-    boardStore.moveCardToHand(cardUuid.value, "one");
-    // get card
-}
+// const temp = () => {
+//     boardStore.moveCardToHand(cardUuid.value, "one");
+//     // get card
+// }
 
-const returnCard = () => {
-    boardStore.moveCardToDeck(cardUuid.value)
-}
+// const returnCard = () => {
+//     boardStore.moveCardToDeck(cardUuid.value)
+// }
 
 </script>
 
