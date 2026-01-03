@@ -1,13 +1,20 @@
 <template>
-    <TresMesh :ref="(el) => cardC = el" :position="[position.x, position.y, position.z]"
+    <TresMesh :ref="(el) => cardC = el" @click="handleClick"
+      @pointerenter="handlePointerEnter"
+      @pointerleave="handlePointerLeave" 
       >
       <TresPlaneGeometry :args="[1.1, 1.4]" />
       <TresShaderMaterial :vertex-shader="vertexShader" :fragment-shader="fShader" :uniforms="uniforms" :side="THREE.DoubleSide" />
     </TresMesh>
+    <!-- when we attach a 3D object to another, "position" would be its position relative to the parent. so 0,0,0 would overlap the parent object -->
+    <TresMesh :ref="(el) => childCardC = el" :position="[0, 0, 0]" :visible="false">
+      <TresPlaneGeometry :args="[1.1, 1.4]" />
+      <TresMeshBasicMaterial :color="'yellow'" :transparent="true" :opacity="0.8" :side="THREE.DoubleSide" :depth-write="false" />
+    </TresMesh>
   </template>
   
   <script setup>
-  import { ref, onMounted, computed, watch } from "vue";
+  import { ref, onMounted, computed, watch, shallowRef } from "vue";
   import * as THREE from "three";
   import { useTexture } from "@tresjs/cientos";
   import vertexShader from "../shaders/vertex.glsl.js";
@@ -22,16 +29,17 @@
   
   // props
   const { card, actorId } = defineProps(["card", "actorId"]);
-  const { scene } = useTres();
+  const { scene, invalidate } = useTres();
   // emit to GameBoard.vue
   // const emit = defineEmits(["click", "pointerOver"]);
-  // refs
-  const cardC = ref();
+
+  // here shallowRef is used because of changes in TresJs v5 for performance optimization (also Vue would snap the object back to its original position after animated)
+  const cardC = shallowRef();
+  const childCardC = shallowRef();
   const stateStore = useStateStore();
   const playerStore = usePlayerStore();
   const gameStateStore = useGameStateStore();
   const boardStore = useBoardStore();
-  const position = ref(card.position);
   const FIRST_OPTION_CARD_ID = 191;
 
   // card name
@@ -84,6 +92,9 @@
   
   onMounted(async () => {
     cardC.value.name = cardName
+
+    // attach child card to the card
+    cardC.value.add(childCardC.value);
     
     // set position and flip the card to show the back side
     boardStore.setInitCard(cardName, actorId, scene.value)
@@ -112,14 +123,17 @@
 
   function handlePointerEnter(event) {
     event.stopPropagation()
-    console.count(`pointer enter. apply outline effect`)
-    console.count(`### hovered card ${cardName} pointer enter`)
+    console.log(`pointer enter. apply outline effect`)
+    console.log(`### hovered card ${cardName} pointer enter`)
+    childCardC.value.visible = !childCardC.value.visible;
+    invalidate(); // Force TresJS to redraw
+    document.body.style.cursor = "pointer";
   }
   
   function handlePointerLeave(event) {
-    event.stopPropagation()
-    console.count(`pointer leave. remove outline effect`)
-    console.count(`### left card ${cardName} pointer leave`)
+    childCardC.value.visible = !childCardC.value.visible;
+    invalidate(); // Force TresJS to redraw
+    document.body.style.cursor = "auto";
   }
 
   function handlePointerOut(event) {

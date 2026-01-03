@@ -128,19 +128,21 @@ export const useBoardStore = defineStore("board", {
                 duration: 0,
             });
         },
-        async moveCardToHand(cardName, handPos, scene) {
+        async moveCardToHand(cardName, handPos, scene, invalidate) {
             // get card
             const card = scene.getObjectByName(cardName)
             // get target position
             const targetPos = useGameStateStore().isPlayerTurn ? playerHand.position : opponentHand.position;
             const targetRotation = useGameStateStore().isPlayerTurn ? playerHand.rotation : opponentHand.rotation;
             const targetScale = useGameStateStore().isPlayerTurn ? playerHand.scale : opponentHand.scale;
-            
+
             // animate
             const tl = createTimeline({
                 defaults: {
                     duration: 250,
                     easing: "cubicBezier(.5, .05, .1, .3)",
+                    // IMPORTANT!!! Force TresJS to redraw on every frame of the animation
+                    onUpdate: () => invalidate()
                 }
             })
             tl.add(card.scale, {
@@ -164,7 +166,7 @@ export const useBoardStore = defineStore("board", {
             return tl;
 
         },
-        async moveCardToOffline(cardName, scene) {
+        async moveCardToOffline(cardName, scene, invalidate) {
             // get card
             const card = scene.getObjectByName(cardName)
             // get target position
@@ -179,6 +181,7 @@ export const useBoardStore = defineStore("board", {
                 defaults: {
                     duration: 250,
                     easing: "cubicBezier(.5, .05, .1, .3)",
+                    onUpdate: () => invalidate()
                 }
             })
             tl.add(card.position, {

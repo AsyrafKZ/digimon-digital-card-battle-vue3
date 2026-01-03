@@ -8,7 +8,7 @@ import { useGameStateStore, PHASE } from "../stores/gameState";
 import { useBoardStore } from "../stores/board";
 import { CARD_STATE } from "../const/const";
 
-const { scene } = useTres();
+const { scene, invalidate } = useTres();
 const gameStateStore = useGameStateStore();
 const boardStore = useBoardStore();
 
@@ -32,7 +32,7 @@ const handleDrawPhase = async () => {
         const topCard = deckCards[deckCards.length - 1]
         
         gameStateStore.updateCardStatus(gameStateStore.currentTurnActor, topCard.uuid, CARD_STATE.HAND)
-        await boardStore.moveCardToHand(topCard.uuid, handCount, scene.value)
+        await boardStore.moveCardToHand(topCard.uuid, handCount, scene.value, invalidate)
 
         handCount++
     }
@@ -45,7 +45,7 @@ const removeCardFromHand = async () => {
         const handCards = gameStateStore.isPlayerTurn ? gameStateStore.playerHand : gameStateStore.opponentHand
         const card = handCards[handCards.length - 1]
         
-        await boardStore.moveCardToOffline(card.uuid, scene.value)
+        await boardStore.moveCardToOffline(card.uuid, scene.value, invalidate)
         gameStateStore.updateCardStatus(gameStateStore.currentTurnActor, card.uuid, CARD_STATE.OFFLINE)
 
         handCount--
